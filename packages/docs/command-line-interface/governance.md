@@ -194,9 +194,6 @@ OPTIONS
 
   --jsonTransactions=jsonTransactions                Path to json transactions
 
-  --number=number                                    [default: 1] Number of transactions to prompt for in interactive
-                                                     mode
-
   --ledgerAddresses=ledgerAddresses                  [default: 1] If --useLedger is set, this will get the first N
                                                      addresses for local signing
 
