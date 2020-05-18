@@ -2,13 +2,13 @@
 description: Interact with on-chain governance proposals and hotfixes
 ---
 
-## Commands
+# Governance
 
-### Approve
+## Approve
 
 Approve a dequeued governance proposal
 
-```
+```text
 USAGE
   $ celocli governance:approve
 
@@ -22,13 +22,13 @@ EXAMPLES
   approve --proposalID 99 --from 0x5409ed021d9299bf6814279a6a1411a7e866a631 --useMultiSig
 ```
 
-_See code: [packages/cli/src/commands/governance/approve.ts](https://github.com/celo-org/celo-monorepo/tree/master/packages/cli/src/commands/governance/approve.ts)_
+_See code:_ [_packages/cli/src/commands/governance/approve.ts_](https://github.com/celo-org/celo-monorepo/tree/master/packages/cli/src/commands/governance/approve.ts)
 
-### Approvehotfix
+## Approvehotfix
 
 Approve a governance hotfix
 
-```
+```text
 USAGE
   $ celocli governance:approvehotfix
 
@@ -41,13 +41,13 @@ EXAMPLE
   0x5409ed021d9299bf6814279a6a1411a7e866a631
 ```
 
-_See code: [packages/cli/src/commands/governance/approvehotfix.ts](https://github.com/celo-org/celo-monorepo/tree/master/packages/cli/src/commands/governance/approvehotfix.ts)_
+_See code:_ [_packages/cli/src/commands/governance/approvehotfix.ts_](https://github.com/celo-org/celo-monorepo/tree/master/packages/cli/src/commands/governance/approvehotfix.ts)
 
-### Dequeue
+## Dequeue
 
 Try to dequeue governance proposal
 
-```
+```text
 USAGE
   $ celocli governance:dequeue
 
@@ -58,13 +58,13 @@ EXAMPLE
   dequeue --from 0x5409ed021d9299bf6814279a6a1411a7e866a631
 ```
 
-_See code: [packages/cli/src/commands/governance/dequeue.ts](https://github.com/celo-org/celo-monorepo/tree/master/packages/cli/src/commands/governance/dequeue.ts)_
+_See code:_ [_packages/cli/src/commands/governance/dequeue.ts_](https://github.com/celo-org/celo-monorepo/tree/master/packages/cli/src/commands/governance/dequeue.ts)
 
-### Execute
+## Execute
 
 Execute a passing governance proposal
 
-```
+```text
 USAGE
   $ celocli governance:execute
 
@@ -76,13 +76,13 @@ EXAMPLE
   execute --proposalID 99 --from 0x5409ed021d9299bf6814279a6a1411a7e866a631
 ```
 
-_See code: [packages/cli/src/commands/governance/execute.ts](https://github.com/celo-org/celo-monorepo/tree/master/packages/cli/src/commands/governance/execute.ts)_
+_See code:_ [_packages/cli/src/commands/governance/execute.ts_](https://github.com/celo-org/celo-monorepo/tree/master/packages/cli/src/commands/governance/execute.ts)
 
-### Executehotfix
+## Executehotfix
 
 Execute a governance hotfix prepared for the current epoch
 
-```
+```text
 USAGE
   $ celocli governance:executehotfix
 
@@ -96,13 +96,13 @@ EXAMPLE
   0x614dccb5ac13cba47c2430bdee7829bb8c8f3603a8ace22e7680d317b39e3658 --from 0x5409ed021d9299bf6814279a6a1411a7e866a631
 ```
 
-_See code: [packages/cli/src/commands/governance/executehotfix.ts](https://github.com/celo-org/celo-monorepo/tree/master/packages/cli/src/commands/governance/executehotfix.ts)_
+_See code:_ [_packages/cli/src/commands/governance/executehotfix.ts_](https://github.com/celo-org/celo-monorepo/tree/master/packages/cli/src/commands/governance/executehotfix.ts)
 
-### List
+## List
 
-List live governance proposals (queued and ongoing)
+List live governance proposals \(queued and ongoing\)
 
-```
+```text
 USAGE
   $ celocli governance:list
 
@@ -110,13 +110,13 @@ EXAMPLE
   list
 ```
 
-_See code: [packages/cli/src/commands/governance/list.ts](https://github.com/celo-org/celo-monorepo/tree/master/packages/cli/src/commands/governance/list.ts)_
+_See code:_ [_packages/cli/src/commands/governance/list.ts_](https://github.com/celo-org/celo-monorepo/tree/master/packages/cli/src/commands/governance/list.ts)
 
-### Preparehotfix
+## Preparehotfix
 
 Prepare a governance hotfix for execution in the current epoch
 
-```
+```text
 USAGE
   $ celocli governance:preparehotfix
 
@@ -129,13 +129,13 @@ EXAMPLE
   0x5409ed021d9299bf6814279a6a1411a7e866a631
 ```
 
-_See code: [packages/cli/src/commands/governance/preparehotfix.ts](https://github.com/celo-org/celo-monorepo/tree/master/packages/cli/src/commands/governance/preparehotfix.ts)_
+_See code:_ [_packages/cli/src/commands/governance/preparehotfix.ts_](https://github.com/celo-org/celo-monorepo/tree/master/packages/cli/src/commands/governance/preparehotfix.ts)
 
-### Propose
+## Propose
 
 Submit a governance proposal
 
-```
+```text
 USAGE
   $ celocli governance:propose
 
@@ -154,13 +154,13 @@ EXAMPLE
   --descriptionURL https://gist.github.com/yorhodes/46430eacb8ed2f73f7bf79bef9d58a33
 ```
 
-_See code: [packages/cli/src/commands/governance/propose.ts](https://github.com/celo-org/celo-monorepo/tree/master/packages/cli/src/commands/governance/propose.ts)_
+_See code:_ [_packages/cli/src/commands/governance/propose.ts_](https://github.com/celo-org/celo-monorepo/tree/master/packages/cli/src/commands/governance/propose.ts)
 
-### Upvote
+## Upvote
 
 Upvote a queued governance proposal
 
-```
+```text
 USAGE
   $ celocli governance:upvote
 
@@ -172,13 +172,13 @@ EXAMPLE
   upvote --proposalID 99 --from 0x5409ed021d9299bf6814279a6a1411a7e866a631
 ```
 
-_See code: [packages/cli/src/commands/governance/upvote.ts](https://github.com/celo-org/celo-monorepo/tree/master/packages/cli/src/commands/governance/upvote.ts)_
+_See code:_ [_packages/cli/src/commands/governance/upvote.ts_](https://github.com/celo-org/celo-monorepo/tree/master/packages/cli/src/commands/governance/upvote.ts)
 
-### View
+## View
 
 View governance proposal information from ID
 
-```
+```text
 USAGE
   $ celocli governance:view
 
@@ -191,13 +191,13 @@ EXAMPLES
   view --proposalID 99 --raw
 ```
 
-_See code: [packages/cli/src/commands/governance/view.ts](https://github.com/celo-org/celo-monorepo/tree/master/packages/cli/src/commands/governance/view.ts)_
+_See code:_ [_packages/cli/src/commands/governance/view.ts_](https://github.com/celo-org/celo-monorepo/tree/master/packages/cli/src/commands/governance/view.ts)
 
-### Viewhotfix
+## Viewhotfix
 
 View information associated with hotfix
 
-```
+```text
 USAGE
   $ celocli governance:viewhotfix
 
@@ -210,13 +210,13 @@ EXAMPLES
   viewhotfix --hash 0x614dccb5ac13cba47c2430bdee7829bb8c8f3603a8ace22e7680d317b39e3658 --notyet
 ```
 
-_See code: [packages/cli/src/commands/governance/viewhotfix.ts](https://github.com/celo-org/celo-monorepo/tree/master/packages/cli/src/commands/governance/viewhotfix.ts)_
+_See code:_ [_packages/cli/src/commands/governance/viewhotfix.ts_](https://github.com/celo-org/celo-monorepo/tree/master/packages/cli/src/commands/governance/viewhotfix.ts)
 
-### Vote
+## Vote
 
 Vote on an approved governance proposal
 
-```
+```text
 USAGE
   $ celocli governance:vote
 
@@ -229,13 +229,13 @@ EXAMPLE
   vote --proposalID 99 --value Yes --from 0x5409ed021d9299bf6814279a6a1411a7e866a631
 ```
 
-_See code: [packages/cli/src/commands/governance/vote.ts](https://github.com/celo-org/celo-monorepo/tree/master/packages/cli/src/commands/governance/vote.ts)_
+_See code:_ [_packages/cli/src/commands/governance/vote.ts_](https://github.com/celo-org/celo-monorepo/tree/master/packages/cli/src/commands/governance/vote.ts)
 
-### Whitelisthotfix
+## Whitelisthotfix
 
 Whitelist a governance hotfix
 
-```
+```text
 USAGE
   $ celocli governance:whitelisthotfix
 
@@ -248,4 +248,5 @@ EXAMPLE
   0x5409ed021d9299bf6814279a6a1411a7e866a631
 ```
 
-_See code: [packages/cli/src/commands/governance/whitelisthotfix.ts](https://github.com/celo-org/celo-monorepo/tree/master/packages/cli/src/commands/governance/whitelisthotfix.ts)_
+_See code:_ [_packages/cli/src/commands/governance/whitelisthotfix.ts_](https://github.com/celo-org/celo-monorepo/tree/master/packages/cli/src/commands/governance/whitelisthotfix.ts)
+

@@ -18,4 +18,5 @@ for traded amounts that are small relative to the bucket quantities. Whenever th
 
 If the oracle precisely mirrors the market rate, the on-chain Celo Gold to Celo Dollar rate will equal the Celo Gold to US Dollar market rate and no profit opportunity will exist as long as Celo Dollar is pegged. If the oracle price is imprecise, the two rates will differ, and a profit opportunity will be present even if Celo Dollar is pegged. However, as traders exploit this opportunity, the on-chain price $$P_t$$ will dynamically adjust in response to changes in the tank quantities until the opportunity ceases to exist. This limits the depletion potential in the CP-DOTO mechanism in the case of imprecise or manipulated oracle rates.
 
-For a more detailed explanation, read article [Zooming in on the Celo Expansion & Contraction Mechanism](https://medium.com/celoorg/zooming-in-on-the-celo-expansion-contraction-mechanism-446ca7abe4f "Zooming in on the Celo Expansion & Contraction Mechanism").
+For a more detailed explanation, read article [Zooming in on the Celo Expansion & Contraction Mechanism](https://medium.com/celoorg/zooming-in-on-the-celo-expansion-contraction-mechanism-446ca7abe4f).
+
