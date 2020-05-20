@@ -252,7 +252,7 @@ export class BlockscoutAPI extends RESTDataSource {
       amount: {
         // Signed amount relative to the account currency
         value: new BigNumber(transfer.value)
-          .multipliedBy(sentByUser ? -1 : 1) // TODO anna could be backwards
+          .multipliedBy(sentByUser ? -1 : 1)
           .dividedBy(WEI_PER_GOLD)
           .toString(),
         currencyCode: transfer.token,

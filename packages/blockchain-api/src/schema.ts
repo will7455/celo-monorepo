@@ -284,7 +284,6 @@ export const resolvers = {
   Event: {
     __resolveType(obj: EventInterface, context: any, info: any) {
       if (obj.type in ExchangeEventTypes) {
-        // TODO(anna) Make sure cleaner typechecking works
         return 'Exchange'
       }
       if (obj.type in TransferEventTypes) {
