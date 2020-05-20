@@ -1,7 +1,7 @@
 import { gql } from 'apollo-server-express'
 import BigNumber from 'bignumber.js'
 import { DataSources } from './apolloServer'
-import { FAUCET_ADDRESS, VERIFICATION_REWARDS_ADDRESS } from './config'
+import { FAUCET_ADDRESS, MOONPAY_CASH_IN_ADDRESS, VERIFICATION_REWARDS_ADDRESS } from './config'
 
 enum TransferEventTypes {
   RECEIVED = 'RECEIVED',
@@ -26,7 +26,7 @@ export const EventTypes = { ...TransferEventTypes, ...ExchangeEventTypes }
 export const KNOWN_ENTITIES: { [key: string]: TransferEventTypes } = {
   [FAUCET_ADDRESS]: EventTypes.FAUCET,
   [VERIFICATION_REWARDS_ADDRESS]: TransferEventTypes.VERIFICATION_REWARD,
-  ['0xcel0']: TransferEventTypes.MOONPAY_CASH_IN, // TODO (anna) update
+  [MOONPAY_CASH_IN_ADDRESS]: TransferEventTypes.MOONPAY_CASH_IN,
 }
 
 export interface ExchangeEvent {

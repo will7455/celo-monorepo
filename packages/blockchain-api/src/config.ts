@@ -42,7 +42,10 @@ export const EXCHANGE_RATES_API = (process.env.EXCHANGE_RATES_API as string).toL
 export const { EXCHANGE_RATES_API_ACCESS_KEY } = getSecrets(DEPLOY_ENV)
 export const BLOCKSCOUT_API = (process.env.BLOCKSCOUT_API as string).toLowerCase()
 export const FIREBASE_DB = process.env.FIREBASE_DB
+export const WEB3_PROVIDER_URL = process.env.WEB3_PROVIDER_URL
+
+// Known entity addresses
+export const MOONPAY_CASH_IN_ADDRESS = '0xc216ed2d6c295579718dbd4a797845cda70b3c36'
 export const FAUCET_ADDRESS = (process.env.FAUCET_ADDRESS as string).toLowerCase()
 export const VERIFICATION_REWARDS_ADDRESS = (process.env
   .VERIFICATION_REWARDS_ADDRESS as string).toLowerCase()
-export const WEB3_PROVIDER_URL = process.env.WEB3_PROVIDER_URL
