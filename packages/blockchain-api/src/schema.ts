@@ -1,9 +1,9 @@
 import { gql } from 'apollo-server-express'
 import BigNumber from 'bignumber.js'
 import { DataSources } from './apolloServer'
+import { FAUCET_ADDRESS, VERIFICATION_REWARDS_ADDRESS } from './config'
 
-export enum EventTypes {
-  EXCHANGE = 'EXCHANGE',
+enum TransferEventTypes {
   RECEIVED = 'RECEIVED',
   SENT = 'SENT',
   FAUCET = 'FAUCET',
@@ -11,6 +11,22 @@ export enum EventTypes {
   VERIFICATION_FEE = 'VERIFICATION_FEE',
   ESCROW_SENT = 'ESCROW_SENT',
   ESCROW_RECEIVED = 'ESCROW_RECEIVED',
+  MOONPAY_CASH_IN = 'MOONPAY_CASH_IN',
+}
+
+export enum ExchangeEventTypes {
+  EXCHANGE = 'EXCHANGE',
+}
+
+// Workaround since Typescript does not yet support enum inheritance
+// See https://github.com/microsoft/TypeScript/issues/17592#issuecomment-561065132
+export type EventTypes = TransferEventTypes | ExchangeEventTypes
+export const EventTypes = { ...TransferEventTypes, ...ExchangeEventTypes }
+
+export const KNOWN_ENTITIES: { [key: string]: TransferEventTypes } = {
+  [FAUCET_ADDRESS]: EventTypes.FAUCET,
+  [VERIFICATION_REWARDS_ADDRESS]: TransferEventTypes.VERIFICATION_REWARD,
+  ['0xcel0']: TransferEventTypes.MOONPAY_CASH_IN, // TODO (anna) update
 }
 
 export interface ExchangeEvent {
@@ -264,21 +280,13 @@ export const resolvers = {
       return { rate: rate.toNumber() }
     },
   },
-  // TODO(kamyar):  see the comment about union causing problems
   Event: {
     __resolveType(obj: EventInterface, context: any, info: any) {
-      if (obj.type === EventTypes.EXCHANGE) {
+      if (obj.type in ExchangeEventTypes) {
+        // TODO(anna) Make sure cleaner typechecking works
         return 'Exchange'
       }
-      if (
-        obj.type === EventTypes.RECEIVED ||
-        obj.type === EventTypes.ESCROW_RECEIVED ||
-        obj.type === EventTypes.ESCROW_SENT ||
-        obj.type === EventTypes.SENT ||
-        obj.type === EventTypes.FAUCET ||
-        obj.type === EventTypes.VERIFICATION_FEE ||
-        obj.type === EventTypes.VERIFICATION_REWARD
-      ) {
+      if (obj.type in TransferEventTypes) {
         return 'Transfer'
       }
       return null
@@ -286,18 +294,10 @@ export const resolvers = {
   },
   TokenTransaction: {
     __resolveType(obj: EventInterface, context: any, info: any) {
-      if (obj.type === EventTypes.EXCHANGE) {
+      if (obj.type in ExchangeEventTypes) {
         return 'TokenExchange'
       }
-      if (
-        obj.type === EventTypes.RECEIVED ||
-        obj.type === EventTypes.ESCROW_RECEIVED ||
-        obj.type === EventTypes.ESCROW_SENT ||
-        obj.type === EventTypes.SENT ||
-        obj.type === EventTypes.FAUCET ||
-        obj.type === EventTypes.VERIFICATION_FEE ||
-        obj.type === EventTypes.VERIFICATION_REWARD
-      ) {
+      if (obj.type in TransferEventTypes) {
         return 'TokenTransfer'
       }
       return null

@@ -1,7 +1,13 @@
 import { RESTDataSource } from 'apollo-datasource-rest'
 import BigNumber from 'bignumber.js'
-import { BLOCKSCOUT_API, FAUCET_ADDRESS, VERIFICATION_REWARDS_ADDRESS } from './config'
-import { EventArgs, EventTypes, TokenTransactionArgs, TransferEvent } from './schema'
+import { BLOCKSCOUT_API, VERIFICATION_REWARDS_ADDRESS } from './config'
+import {
+  EventArgs,
+  EventTypes,
+  KNOWN_ENTITIES,
+  TokenTransactionArgs,
+  TransferEvent,
+} from './schema'
 import { formatCommentString, getContractAddresses } from './utils'
 
 // to get rid of 18 extra 0s in the values
@@ -230,10 +236,11 @@ export class BlockscoutAPI extends RESTDataSource {
     const comment = transferTx.input ? formatCommentString(transferTx.input) : ''
     const eventToAddress = transfer.toAddressHash.toLowerCase()
     const eventFromAddress = transfer.fromAddressHash.toLowerCase()
-    const [type, address] = resolveTransferEventType(
-      userAddress,
-      eventToAddress,
-      eventFromAddress,
+    const sentByUser = userIsSender(userAddress, eventToAddress, eventFromAddress)
+    const address = sentByUser ? eventToAddress : eventFromAddress
+    const type = eventTypeFromAddress(
+      sentByUser,
+      address,
       this.getAttestationAddress(),
       this.getEscrowAddress()
     )
@@ -245,7 +252,7 @@ export class BlockscoutAPI extends RESTDataSource {
       amount: {
         // Signed amount relative to the account currency
         value: new BigNumber(transfer.value)
-          .multipliedBy(eventFromAddress === userAddress ? -1 : 1)
+          .multipliedBy(sentByUser ? -1 : 1) // TODO anna could be backwards
           .dividedBy(WEI_PER_GOLD)
           .toString(),
         currencyCode: transfer.token,
@@ -355,33 +362,43 @@ export class BlockscoutAPI extends RESTDataSource {
   }
 }
 
-function resolveTransferEventType(
-  userAddress: string,
-  eventToAddress: string,
-  eventFromAddress: string,
+function userIsSender(userAddress: string, eventToAddress: string, eventFromAddress: string) {
+  if (eventToAddress === userAddress) {
+    // TODO anna could be backwards
+    return true
+  } else if (eventFromAddress === userAddress) {
+    return false
+  } else {
+    throw new Error('Event must be to or from')
+  }
+}
+
+function eventTypeFromAddress(
+  sentByUser: boolean,
+  address: string,
   attestationsAddress: string,
   escrowAddress: string
-): [EventTypes, string] {
-  if (eventToAddress === userAddress && eventFromAddress === FAUCET_ADDRESS) {
-    return [EventTypes.FAUCET, FAUCET_ADDRESS]
+): EventTypes {
+  if (address in KNOWN_ENTITIES) {
+    return KNOWN_ENTITIES.address
   }
-  if (eventToAddress === attestationsAddress && eventFromAddress === userAddress) {
-    return [EventTypes.VERIFICATION_FEE, attestationsAddress]
+
+  // EventTypes based on non-hardcoded addresses which are fetched from the network
+  if (sentByUser) {
+    switch (address) {
+      case attestationsAddress:
+        return EventTypes.VERIFICATION_FEE
+      case escrowAddress:
+        return EventTypes.ESCROW_SENT
+      default:
+        return EventTypes.SENT
+    }
+  } else {
+    switch (address) {
+      case escrowAddress:
+        return EventTypes.ESCROW_RECEIVED
+      default:
+        return EventTypes.RECEIVED
+    }
   }
-  if (eventToAddress === userAddress && eventFromAddress === VERIFICATION_REWARDS_ADDRESS) {
-    return [EventTypes.VERIFICATION_REWARD, VERIFICATION_REWARDS_ADDRESS]
-  }
-  if (eventToAddress === userAddress && eventFromAddress === escrowAddress) {
-    return [EventTypes.ESCROW_RECEIVED, eventFromAddress]
-  }
-  if (eventToAddress === userAddress) {
-    return [EventTypes.RECEIVED, eventFromAddress]
-  }
-  if (eventFromAddress === userAddress && eventToAddress === escrowAddress) {
-    return [EventTypes.ESCROW_SENT, eventToAddress]
-  }
-  if (eventFromAddress === userAddress) {
-    return [EventTypes.SENT, eventToAddress]
-  }
-  throw new Error('No valid event type found ')
 }
