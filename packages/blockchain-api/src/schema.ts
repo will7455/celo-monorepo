@@ -163,6 +163,7 @@ export const typeDefs = gql`
     INVITE_RECEIVED
     PAY_REQUEST
     NETWORK_FEE
+    MOONPAY_CASH_IN
   }
 
   interface TokenTransaction {

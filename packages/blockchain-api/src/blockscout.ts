@@ -363,10 +363,9 @@ export class BlockscoutAPI extends RESTDataSource {
 }
 
 function userIsSender(userAddress: string, eventToAddress: string, eventFromAddress: string) {
-  if (eventToAddress === userAddress) {
-    // TODO anna could be backwards
+  if (eventFromAddress === userAddress) {
     return true
-  } else if (eventFromAddress === userAddress) {
+  } else if (eventToAddress === userAddress) {
     return false
   } else {
     throw new Error('Event must be to or from')
@@ -380,7 +379,7 @@ function eventTypeFromAddress(
   escrowAddress: string
 ): EventTypes {
   if (address in KNOWN_ENTITIES) {
-    return KNOWN_ENTITIES.address
+    return KNOWN_ENTITIES[address]
   }
 
   // EventTypes based on non-hardcoded addresses which are fetched from the network
