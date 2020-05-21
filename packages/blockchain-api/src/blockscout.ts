@@ -1,13 +1,7 @@
 import { RESTDataSource } from 'apollo-datasource-rest'
 import BigNumber from 'bignumber.js'
 import { BLOCKSCOUT_API, VERIFICATION_REWARDS_ADDRESS } from './config'
-import {
-  EventArgs,
-  EventTypes,
-  KNOWN_ENTITIES,
-  TokenTransactionArgs,
-  TransferEvent,
-} from './schema'
+import { EventArgs, EventTypes, KnownEntities, TokenTransactionArgs, TransferEvent } from './schema'
 import { formatCommentString, getContractAddresses } from './utils'
 
 // to get rid of 18 extra 0s in the values
@@ -378,8 +372,8 @@ function eventTypeFromAddress(
   attestationsAddress: string,
   escrowAddress: string
 ): EventTypes {
-  if (address in KNOWN_ENTITIES) {
-    return KNOWN_ENTITIES[address]
+  if (address in KnownEntities) {
+    return KnownEntities[address]
   }
 
   // EventTypes based on non-hardcoded addresses which are fetched from the network

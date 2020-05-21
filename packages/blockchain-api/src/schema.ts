@@ -23,7 +23,7 @@ export enum ExchangeEventTypes {
 export type EventTypes = TransferEventTypes | ExchangeEventTypes
 export const EventTypes = { ...TransferEventTypes, ...ExchangeEventTypes }
 
-export const KNOWN_ENTITIES: { [key: string]: TransferEventTypes } = {
+export const KnownEntities: { [key: string]: TransferEventTypes } = {
   [FAUCET_ADDRESS]: EventTypes.FAUCET,
   [VERIFICATION_REWARDS_ADDRESS]: TransferEventTypes.VERIFICATION_REWARD,
   [MOONPAY_CASH_IN_ADDRESS]: TransferEventTypes.MOONPAY_CASH_IN,
