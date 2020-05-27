@@ -32,9 +32,17 @@ export default function TransferFeedIcon(props: Props) {
         </View>
       )
     }
+    case TokenTransactionType.MoonpayCashIn: {
+      return (
+        <View style={styles.image}>
+          {/* TODO(anna) moonpay icon */}
+          <RewardIcon height={38} />
+        </View>
+      )
+    }
     case TokenTransactionType.Received: // fallthrough
     case TokenTransactionType.Sent: // fallthrough
-    case TokenTransactionType.EscrowSent:
+    case TokenTransactionType.EscrowSent: // fallthrough
     case TokenTransactionType.EscrowReceived:
     default: {
       return (

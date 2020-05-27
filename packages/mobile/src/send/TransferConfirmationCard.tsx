@@ -84,6 +84,8 @@ const renderTopSection = (props: Props) => {
     type === TokenTransactionType.Faucet
   ) {
     return <Image source={faucetIcon} style={style.icon} />
+  } else if (type === TokenTransactionType.MoonpayCashIn) {
+    return <Image source={faucetIcon} style={style.icon} /> // TODO Moonpay icon
   } else {
     return (
       <View>

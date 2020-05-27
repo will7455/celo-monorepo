@@ -61,6 +61,11 @@ export function getTransferFeedParams(
       })
       break
     }
+    case TokenTransactionType.MoonpayCashIn: {
+      title = 'Purchased cUSD' // TODO(anna) translate t('feedItemFaucetTitle')
+      info = 'Purchased x'
+      break
+    }
     case TokenTransactionType.InviteSent: {
       title = t('feedItemInviteSentTitle')
       info = t('feedItemInviteSentInfo', {
