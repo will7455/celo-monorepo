@@ -22,9 +22,10 @@ export default class ElectionGini extends BaseCommand {
     const groupAffiliations: { [key: string]: number } = {}
     validatorList.forEach((val) => {
       const affiliation = val.affiliation as string
+      const score = val.score.toNumber()
       groupAffiliations[affiliation] = groupAffiliations[affiliation]
-        ? groupAffiliations[affiliation] + 1
-        : 1
+        ? groupAffiliations[affiliation] + score
+        : score
     })
     const incomes = Object.values(groupAffiliations).sort()
     // using this formula: https://www.statsdirect.com/help/nonparametric_methods/gini_coefficient.htm
