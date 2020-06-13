@@ -5,7 +5,6 @@ import chalk from 'chalk'
 import * as prompts from 'prompts'
 import {
   ReleaseGoldContract,
-  ReleaseGoldMultiSigContract,
   ReleaseGoldMultiSigProxyContract,
   ReleaseGoldProxyContract,
 } from 'types'
@@ -17,7 +16,7 @@ let startGold: any
 let fromAddress: any
 let deployedGrants: any
 let deployedGrantsFile: string
-let ReleaseGoldMultiSig: ReleaseGoldMultiSigContract
+// let ReleaseGoldMultiSig: ReleaseGoldMultiSigContract
 let ReleaseGoldMultiSigProxy: ReleaseGoldMultiSigProxyContract
 let ReleaseGold: ReleaseGoldContract
 let ReleaseGoldProxy: ReleaseGoldProxyContract
@@ -405,7 +404,7 @@ module.exports = async (callback: (error?: any) => number) => {
         'really',
       ],
     })
-    ReleaseGoldMultiSig = artifacts.require('ReleaseGoldMultiSig')
+    // ReleaseGoldMultiSig = artifacts.require('ReleaseGoldMultiSig')
     ReleaseGoldMultiSigProxy = artifacts.require('ReleaseGoldMultiSigProxy')
     ReleaseGold = artifacts.require('ReleaseGold')
     ReleaseGoldProxy = artifacts.require('ReleaseGoldProxy')
