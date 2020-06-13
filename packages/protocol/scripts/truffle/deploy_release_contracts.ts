@@ -2,7 +2,6 @@ import { retryTx } from '@celo/protocol/lib/proxy-utils'
 import { _setInitialProxyImplementation } from '@celo/protocol/lib/web3-utils'
 import BigNumber from 'bignumber.js'
 import chalk from 'chalk'
-import fs = require('fs')
 import * as prompts from 'prompts'
 import {
   ReleaseGoldContract,
@@ -10,6 +9,7 @@ import {
   ReleaseGoldMultiSigProxyContract,
   ReleaseGoldProxyContract,
 } from 'types'
+import fs = require('fs')
 
 let argv: any
 let releases: any
@@ -62,33 +62,39 @@ async function handleGrant(releaseGoldConfig: any, currGrant: number) {
       return
     }
   }
-  const releaseGoldMultiSigProxy = await retryTx(ReleaseGoldMultiSigProxy.new, [
-    { from: fromAddress },
-  ])
-  const releaseGoldMultiSigInstance = await retryTx(ReleaseGoldMultiSig.new, [
-    { from: fromAddress },
-  ])
-  const multiSigTxHash = await _setInitialProxyImplementation(
-    web3,
-    releaseGoldMultiSigInstance,
-    releaseGoldMultiSigProxy,
-    'ReleaseGoldMultiSig',
-    {
-      from: fromAddress,
-      value: null,
-    },
-    [releaseGoldConfig.releaseOwner, releaseGoldConfig.beneficiary],
-    2,
-    2
+  const releaseGoldMultiSigProxy = await ReleaseGoldMultiSigProxy.at(
+    '0x06dE1BF1900C2779381AE2fB29Dc442a4Ab22F11'
   )
-  await retryTx(releaseGoldMultiSigProxy._transferOwnership, [
-    releaseGoldMultiSigProxy.address,
-    {
-      from: fromAddress,
-    },
-  ])
-  const releaseGoldProxy = await retryTx(ReleaseGoldProxy.new, [{ from: fromAddress }])
-  const releaseGoldInstance = await retryTx(ReleaseGold.new, [{ from: fromAddress }])
+  // const releaseGoldMultiSigInstance = await ReleaseGoldMultiSig.at("0xFCaF33E8be675b58978Ade84F8cA3dD80c3DF93a")
+  // const releaseGoldMultiSigProxy = await retryTx(ReleaseGoldMultiSigProxy.new, [
+  //   { from: fromAddress },
+  // ])
+  // const releaseGoldMultiSigInstance = await retryTx(ReleaseGoldMultiSig.new, [
+  //   { from: fromAddress },
+  // ])
+  // const multiSigTxHash = await _setInitialProxyImplementation(
+  //   web3,
+  //   releaseGoldMultiSigInstance,
+  //   releaseGoldMultiSigProxy,
+  //   'ReleaseGoldMultiSig',
+  //   {
+  //     from: fromAddress,
+  //     value: null,
+  //   },
+  //   [releaseGoldConfig.releaseOwner, releaseGoldConfig.beneficiary],
+  //   2,
+  //   2
+  // )
+  // await retryTx(releaseGoldMultiSigProxy._transferOwnership, [
+  //   releaseGoldMultiSigProxy.address,
+  //   {
+  //     from: fromAddress,
+  //   },
+  // ])
+  const releaseGoldProxy = await ReleaseGoldProxy.at('0xDC54dddC1eD0e415a808E5EB7bc1eB4Cb643DbB0')
+  const releaseGoldInstance = await ReleaseGold.at('0x69b9121f474A7AA1B2e17fd63282f22F9812052e')
+  // const releaseGoldProxy = await retryTx(ReleaseGoldProxy.new, [{ from: fromAddress }])
+  // const releaseGoldInstance = await retryTx(ReleaseGold.new, [{ from: fromAddress }])
 
   const weiAmountReleasedPerPeriod = new BigNumber(
     web3.utils.toWei(releaseGoldConfig.amountReleasedPerPeriod.toString())
@@ -157,7 +163,7 @@ async function handleGrant(releaseGoldConfig: any, currGrant: number) {
     Beneficiary: releaseGoldConfig.beneficiary,
     ContractAddress: releaseGoldProxy.address,
     MultiSigProxyAddress: releaseGoldMultiSigProxy.address,
-    MultiSigTxHash: multiSigTxHash,
+    // MultiSigTxHash: multiSigTxHash,
     ReleaseGoldTxHash: releaseGoldTxHash,
   }
 
