@@ -1,6 +1,6 @@
 /* tslint:disable:no-console */
 // TODO(asa): Refactor and rename to 'deployment-utils.ts'
-import { retryTx, setAndInitializeImplementation } from '@celo/protocol/lib/proxy-utils'
+import { retryTx, setAndInitializeImplementation, setAndInitializeImplementationSimulation } from '@celo/protocol/lib/proxy-utils'
 import { CeloContractName } from '@celo/protocol/lib/registry-utils'
 import { signTransaction } from '@celo/protocol/lib/signing-utils'
 import { Address, privateKeyToAddress } from '@celo/utils/lib/address'
@@ -174,6 +174,46 @@ export async function _setInitialProxyImplementation<
     checkFunctionArgsLength(args, initializerAbi)
     console.log(`  Setting initial ${contractName} implementation on proxy`)
     receipt = await setAndInitializeImplementation(web3, proxy, implementation.address, initializerAbi, txOptions, ...args)
+  } else {
+    if (txOptions.from != null) {
+      receipt = await retryTx(proxy._setImplementation, [implementation.address, { from: txOptions.from }])
+      if (txOptions.value != null) {
+        await retryTx(web3.eth.sendTransaction, [{
+          from: txOptions.from,
+          to: proxy.address,
+          value: txOptions.value,
+        }])
+      }
+    } else {
+      receipt = await retryTx(proxy._setImplementation, [implementation.address])
+    }
+  }
+  return receipt.tx
+}
+
+export async function _setInitialProxyImplementationSimulation<
+  ContractInstance extends Truffle.ContractInstance
+>(
+  web3: Web3,
+  implementation: ContractInstance,
+  proxy: ProxyInstance,
+  contractName: string,
+  txOptions: {
+    from: Address,
+    value: string,
+  },
+  ...args: any[]
+) {
+  const initializerAbi = (implementation as any).abi.find(
+    (abi: any) => abi.type === 'function' && abi.name === 'initialize'
+  )
+
+  let receipt: any
+  if (initializerAbi) {
+    // TODO(Martin): check types, not just argument number
+    checkFunctionArgsLength(args, initializerAbi)
+    console.log(`  Setting initial ${contractName} implementation on proxy`)
+    receipt = await setAndInitializeImplementationSimulation(web3, proxy, implementation.address, initializerAbi, txOptions, ...args)
   } else {
     if (txOptions.from != null) {
       receipt = await retryTx(proxy._setImplementation, [implementation.address, { from: txOptions.from }])

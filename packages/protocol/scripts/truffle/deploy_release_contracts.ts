@@ -1,8 +1,10 @@
 import { retryTx } from '@celo/protocol/lib/proxy-utils'
-import { _setInitialProxyImplementation } from '@celo/protocol/lib/web3-utils'
+import {
+  _setInitialProxyImplementation,
+  _setInitialProxyImplementationSimulation,
+} from '@celo/protocol/lib/web3-utils'
 import BigNumber from 'bignumber.js'
 import chalk from 'chalk'
-import fs = require('fs')
 import * as prompts from 'prompts'
 import {
   ReleaseGoldContract,
@@ -10,6 +12,7 @@ import {
   ReleaseGoldMultiSigProxyContract,
   ReleaseGoldProxyContract,
 } from 'types'
+import fs = require('fs')
 
 let argv: any
 let releases: any
@@ -107,7 +110,7 @@ async function handleGrant(releaseGoldConfig: any, currGrant: number) {
   // Reflect any rounding changes from the division above
   totalValue = adjustedAmountPerPeriod.multipliedBy(releaseGoldConfig.numReleasePeriods)
 
-  const releaseGoldTxHash = await _setInitialProxyImplementation(
+  const releaseGoldTxHash = await _setInitialProxyImplementationSimulation(
     web3,
     releaseGoldInstance,
     releaseGoldProxy,
@@ -131,25 +134,26 @@ async function handleGrant(releaseGoldConfig: any, currGrant: number) {
     releaseGoldConfig.canVote,
     '0x000000000000000000000000000000000000ce10'
   )
-  const proxiedReleaseGold = await ReleaseGold.at(releaseGoldProxy.address)
-  await retryTx(proxiedReleaseGold.transferOwnership, [
-    releaseGoldMultiSigProxy.address,
-    {
-      from: fromAddress,
-    },
-  ])
-  await retryTx(releaseGoldProxy._transferOwnership, [
-    releaseGoldMultiSigProxy.address,
-    { from: fromAddress },
-  ])
-  // Send starting gold amount to the beneficiary so they can perform transactions.
-  await retryTx(web3.eth.sendTransaction, [
-    {
-      from: fromAddress,
-      to: releaseGoldConfig.beneficiary,
-      value: startGold,
-    },
-  ])
+  process.exit(0)
+  // const proxiedReleaseGold = await ReleaseGold.at(releaseGoldProxy.address)
+  // await retryTx(proxiedReleaseGold.transferOwnership, [
+  //   releaseGoldMultiSigProxy.address,
+  //   {
+  //     from: fromAddress,
+  //   },
+  // ])
+  // await retryTx(releaseGoldProxy._transferOwnership, [
+  //   releaseGoldMultiSigProxy.address,
+  //   { from: fromAddress },
+  // ])
+  // // Send starting gold amount to the beneficiary so they can perform transactions.
+  // await retryTx(web3.eth.sendTransaction, [
+  //   {
+  //     from: fromAddress,
+  //     to: releaseGoldConfig.beneficiary,
+  //     value: startGold,
+  //   },
+  // ])
 
   const record = {
     GrantNumber: currGrant,
