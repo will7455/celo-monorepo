@@ -1,15 +1,9 @@
 import { retryTx } from '@celo/protocol/lib/proxy-utils'
-import { _setInitialProxyImplementation } from '@celo/protocol/lib/web3-utils'
 import BigNumber from 'bignumber.js'
 import chalk from 'chalk'
-import fs = require('fs')
 import * as prompts from 'prompts'
-import {
-  ReleaseGoldContract,
-  ReleaseGoldMultiSigContract,
-  ReleaseGoldMultiSigProxyContract,
-  ReleaseGoldProxyContract,
-} from 'types'
+import { ReleaseGoldMultiSigProxyContract, ReleaseGoldProxyContract } from 'types'
+import fs = require('fs')
 
 let argv: any
 let releases: any
@@ -17,9 +11,9 @@ let startGold: any
 let fromAddress: any
 let deployedGrants: any
 let deployedGrantsFile: string
-let ReleaseGoldMultiSig: ReleaseGoldMultiSigContract
+// let ReleaseGoldMultiSig: ReleaseGoldMultiSigContract
 let ReleaseGoldMultiSigProxy: ReleaseGoldMultiSigProxyContract
-let ReleaseGold: ReleaseGoldContract
+// let ReleaseGold: ReleaseGoldContract
 let ReleaseGoldProxy: ReleaseGoldProxyContract
 const ONE_CGLD = web3.utils.toWei('1', 'ether')
 const TWO_CGLD = web3.utils.toWei('2', 'ether')
@@ -62,82 +56,86 @@ async function handleGrant(releaseGoldConfig: any, currGrant: number) {
       return
     }
   }
-  const releaseGoldMultiSigProxy = await retryTx(ReleaseGoldMultiSigProxy.new, [
-    { from: fromAddress },
-  ])
-  const releaseGoldMultiSigInstance = await retryTx(ReleaseGoldMultiSig.new, [
-    { from: fromAddress },
-  ])
-  const multiSigTxHash = await _setInitialProxyImplementation(
-    web3,
-    releaseGoldMultiSigInstance,
-    releaseGoldMultiSigProxy,
-    'ReleaseGoldMultiSig',
-    {
-      from: fromAddress,
-      value: null,
-    },
-    [releaseGoldConfig.releaseOwner, releaseGoldConfig.beneficiary],
-    2,
-    2
+  const releaseGoldMultiSigProxy = await ReleaseGoldMultiSigProxy.at(
+    '0xe0272D82E6DB198d713115e978d57BE9484FFD55'
   )
-  await retryTx(releaseGoldMultiSigProxy._transferOwnership, [
-    releaseGoldMultiSigProxy.address,
-    {
-      from: fromAddress,
-    },
-  ])
-  const releaseGoldProxy = await retryTx(ReleaseGoldProxy.new, [{ from: fromAddress }])
-  const releaseGoldInstance = await retryTx(ReleaseGold.new, [{ from: fromAddress }])
+  // const releaseGoldMultiSigProxy = await retryTx(ReleaseGoldMultiSigProxy.new, [
+  //   { from: fromAddress },
+  // ])
+  // const releaseGoldMultiSigInstance = await retryTx(ReleaseGoldMultiSig.new, [
+  //   { from: fromAddress },
+  // ])
+  // const multiSigTxHash = await _setInitialProxyImplementation(
+  //   web3,
+  //   releaseGoldMultiSigInstance,
+  //   releaseGoldMultiSigProxy,
+  //   'ReleaseGoldMultiSig',
+  //   {
+  //     from: fromAddress,
+  //     value: null,
+  //   },
+  //   [releaseGoldConfig.releaseOwner, releaseGoldConfig.beneficiary],
+  //   2,
+  //   2
+  // )
+  // await retryTx(releaseGoldMultiSigProxy._transferOwnership, [
+  //   releaseGoldMultiSigProxy.address,
+  //   {
+  //     from: fromAddress,
+  //   },
+  // ])
+  const releaseGoldProxy = await ReleaseGoldProxy.at('0x4519FEC2fBa8E8D603a67cB35Ee08Cda57F9d318')
+  // const releaseGoldProxy = await retryTx(ReleaseGoldProxy.new, [{ from: fromAddress }])
+  // const releaseGoldInstance = await retryTx(ReleaseGold.new, [{ from: fromAddress }])
 
-  const weiAmountReleasedPerPeriod = new BigNumber(
-    web3.utils.toWei(releaseGoldConfig.amountReleasedPerPeriod.toString())
-  )
+  // const weiAmountReleasedPerPeriod = new BigNumber(
+  //   web3.utils.toWei(releaseGoldConfig.amountReleasedPerPeriod.toString())
+  // )
 
-  let totalValue = weiAmountReleasedPerPeriod.multipliedBy(releaseGoldConfig.numReleasePeriods)
-  if (totalValue.lt(startGold)) {
-    console.info('Total value of grant less than cGLD for beneficiary addreess')
-    process.exit(0)
-  }
-  const adjustedAmountPerPeriod = totalValue
-    .minus(startGold)
-    .div(releaseGoldConfig.numReleasePeriods)
-    .dp(0)
+  // let totalValue = weiAmountReleasedPerPeriod.multipliedBy(releaseGoldConfig.numReleasePeriods)
+  // if (totalValue.lt(startGold)) {
+  //   console.info('Total value of grant less than cGLD for beneficiary addreess')
+  //   process.exit(0)
+  // }
+  // const adjustedAmountPerPeriod = totalValue
+  //   .minus(startGold)
+  //   .div(releaseGoldConfig.numReleasePeriods)
+  //   .dp(0)
 
-  // Reflect any rounding changes from the division above
-  totalValue = adjustedAmountPerPeriod.multipliedBy(releaseGoldConfig.numReleasePeriods)
+  // // Reflect any rounding changes from the division above
+  // totalValue = adjustedAmountPerPeriod.multipliedBy(releaseGoldConfig.numReleasePeriods)
 
-  const releaseGoldTxHash = await _setInitialProxyImplementation(
-    web3,
-    releaseGoldInstance,
-    releaseGoldProxy,
-    'ReleaseGold',
-    {
-      from: fromAddress,
-      value: totalValue.toFixed(),
-    },
-    Math.round(releaseStartTime),
-    releaseGoldConfig.releaseCliffTime,
-    releaseGoldConfig.numReleasePeriods,
-    releaseGoldConfig.releasePeriod,
-    adjustedAmountPerPeriod.toFixed(),
-    releaseGoldConfig.revocable,
-    releaseGoldConfig.beneficiary,
-    releaseGoldConfig.releaseOwner,
-    releaseGoldConfig.refundAddress,
-    releaseGoldConfig.subjectToLiquidityProvision,
-    releaseGoldConfig.initialDistributionRatio,
-    releaseGoldConfig.canValidate,
-    releaseGoldConfig.canVote,
-    '0x000000000000000000000000000000000000ce10'
-  )
-  const proxiedReleaseGold = await ReleaseGold.at(releaseGoldProxy.address)
-  await retryTx(proxiedReleaseGold.transferOwnership, [
-    releaseGoldMultiSigProxy.address,
-    {
-      from: fromAddress,
-    },
-  ])
+  // const releaseGoldTxHash = await _setInitialProxyImplementation(
+  //   web3,
+  //   releaseGoldInstance,
+  //   releaseGoldProxy,
+  //   'ReleaseGold',
+  //   {
+  //     from: fromAddress,
+  //     value: totalValue.toFixed(),
+  //   },
+  //   Math.round(releaseStartTime),
+  //   releaseGoldConfig.releaseCliffTime,
+  //   releaseGoldConfig.numReleasePeriods,
+  //   releaseGoldConfig.releasePeriod,
+  //   adjustedAmountPerPeriod.toFixed(),
+  //   releaseGoldConfig.revocable,
+  //   releaseGoldConfig.beneficiary,
+  //   releaseGoldConfig.releaseOwner,
+  //   releaseGoldConfig.refundAddress,
+  //   releaseGoldConfig.subjectToLiquidityProvision,
+  //   releaseGoldConfig.initialDistributionRatio,
+  //   releaseGoldConfig.canValidate,
+  //   releaseGoldConfig.canVote,
+  //   '0x000000000000000000000000000000000000ce10'
+  // )
+  // const proxiedReleaseGold = await ReleaseGold.at(releaseGoldProxy.address)
+  // await retryTx(proxiedReleaseGold.transferOwnership, [
+  //   releaseGoldMultiSigProxy.address,
+  //   {
+  //     from: fromAddress,
+  //   },
+  // ])
   await retryTx(releaseGoldProxy._transferOwnership, [
     releaseGoldMultiSigProxy.address,
     { from: fromAddress },
@@ -157,8 +155,8 @@ async function handleGrant(releaseGoldConfig: any, currGrant: number) {
     Beneficiary: releaseGoldConfig.beneficiary,
     ContractAddress: releaseGoldProxy.address,
     MultiSigProxyAddress: releaseGoldMultiSigProxy.address,
-    MultiSigTxHash: multiSigTxHash,
-    ReleaseGoldTxHash: releaseGoldTxHash,
+    // MultiSigTxHash: multiSigTxHash,
+    // ReleaseGoldTxHash: releaseGoldTxHash,
   }
 
   deployedGrants.push(releaseGoldConfig.identifier)
@@ -399,9 +397,9 @@ module.exports = async (callback: (error?: any) => number) => {
         'really',
       ],
     })
-    ReleaseGoldMultiSig = artifacts.require('ReleaseGoldMultiSig')
+    // ReleaseGoldMultiSig = artifacts.require('ReleaseGoldMultiSig')
     ReleaseGoldMultiSigProxy = artifacts.require('ReleaseGoldMultiSigProxy')
-    ReleaseGold = artifacts.require('ReleaseGold')
+    // ReleaseGold = artifacts.require('ReleaseGold')
     ReleaseGoldProxy = artifacts.require('ReleaseGoldProxy')
     releases = []
     fromAddress = argv.from
