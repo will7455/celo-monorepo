@@ -7,20 +7,11 @@ import { pincodeTypeSelector } from 'src/account/selectors'
 import { showError } from 'src/alert/actions'
 import { ErrorMessages } from 'src/app/ErrorMessages'
 import { navigate, navigateBack } from 'src/navigator/NavigationService'
-import { setPinInKeystore } from 'src/pincode/PhoneAuthUtils'
 import { getCachedPincode, setCachedPincode } from 'src/pincode/PincodeCache'
 
 const mockPin = '123456'
 
 describe('@setPincode', () => {
-  it('sets a PIN in phone keystore', async () => {
-    await expectSaga(setPincode, { pincodeType: PincodeType.PhoneAuth })
-      .put(setPincodeSuccess(PincodeType.PhoneAuth))
-      .run()
-
-    expect(setPinInKeystore).toHaveBeenCalled()
-  })
-
   it('returns custom PIN', async () => {
     await expectSaga(setPincode, { pincodeType: PincodeType.CustomPin, pin: mockPin })
       .put(setPincodeSuccess(PincodeType.CustomPin))
@@ -40,13 +31,6 @@ describe('@setPincode', () => {
 describe('@getPincode', () => {
   const mockedNavigate = navigate as jest.Mock
   const mockedGetCachedPincode = getCachedPincode as jest.Mock
-  it('returns PIN from phone keystore', async () => {
-    await expectSaga(getPincode)
-      .provide([[select(pincodeTypeSelector), PincodeType.PhoneAuth]])
-      .returns(mockPin)
-      .run()
-  })
-
   it('returns custom PIN', async () => {
     await expectSaga(getPincode)
       .provide([[select(pincodeTypeSelector), PincodeType.CustomPin]])

@@ -1,5 +1,4 @@
-import { randomBytes } from 'react-native-randombytes'
-import { call, put, select, takeLeading } from 'redux-saga/effects'
+import { put, select, takeLeading } from 'redux-saga/effects'
 import {
   Actions,
   SetPincodeAction,
@@ -12,7 +11,6 @@ import { showError } from 'src/alert/actions'
 import { ErrorMessages } from 'src/app/ErrorMessages'
 import { navigate, navigateBack } from 'src/navigator/NavigationService'
 import { Screens } from 'src/navigator/Screens'
-import { getPinFromKeystore, setPinInKeystore } from 'src/pincode/PhoneAuthUtils'
 import { getCachedPincode, setCachedPincode } from 'src/pincode/PincodeCache'
 import Logger from 'src/utils/Logger'
 
@@ -20,11 +18,7 @@ const TAG = 'account/saga'
 
 export function* setPincode({ pincodeType, pin }: SetPincodeAction) {
   try {
-    if (pincodeType === PincodeType.PhoneAuth) {
-      Logger.debug(TAG + '@setPincode', 'Setting pincode with using system auth')
-      pin = randomBytes(10).toString('hex') as string
-      yield call(setPinInKeystore, pin)
-    } else if (pincodeType === PincodeType.CustomPin && pin) {
+    if (pincodeType === PincodeType.CustomPin && pin) {
       Logger.debug(TAG + '@setPincode', 'Pincode set using user provided pin')
       setCachedPincode(pin)
     } else {
@@ -48,17 +42,6 @@ export function* getPincode(withVerification = true) {
     throw Error('Pin has never been set')
   }
 
-  // This method is deprecated and will be removed soon
-  // `withVerification` is ignored here (it will NOT verify PIN)
-  if (pincodeType === PincodeType.PhoneAuth) {
-    Logger.debug(TAG + '@getPincode', 'Getting pin from keystore')
-    const pin = yield call(getPinFromKeystore)
-    if (!pin) {
-      throw new Error('Keystore returned empty pin')
-    }
-    return pin
-  }
-
   if (pincodeType === PincodeType.CustomPin) {
     Logger.debug(TAG + '@getPincode', 'Getting custom pin')
     const cachedPin = getCachedPincode()
@@ -66,7 +49,7 @@ export function* getPincode(withVerification = true) {
       return cachedPin
     }
 
-    const pin = yield new Promise((resolve, reject) => {
+    const pin = yield new Promise((resolve) => {
       navigate(Screens.PincodeEnter, {
         onSuccess: resolve,
         withVerification,
