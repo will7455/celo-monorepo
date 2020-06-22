@@ -15,6 +15,7 @@ contract UsingPrecompiles {
   address constant HASH_HEADER = address(0xff - 9);
   address constant GET_PARENT_SEAL_BITMAP = address(0xff - 10);
   address constant GET_VERIFIED_SEAL_BITMAP = address(0xff - 11);
+  address constant BLS12377_MAP_G1 = address(0xff - 12);
 
   /**
    * @notice calculate a * b^x for fractions a, b to `decimals` precision
@@ -243,6 +244,7 @@ contract UsingPrecompiles {
    * @return bytes32 data
    */
   function getBytes32FromBytes(bytes memory bs, uint256 start) internal pure returns (bytes32) {
+    require(bs.length != 0, "Here bad 0");
     require(bs.length >= start + 32, "slicing out of range");
     bytes32 x;
     assembly {
@@ -267,4 +269,12 @@ contract UsingPrecompiles {
     return minQuorumSize(block.number);
   }
 
+  function bls12377MapG1(bytes memory input) public returns (bytes32) {
+    require(input.length != 0, "Input is 0");
+    bytes memory out;
+    bool success;
+    (success, out) = BLS12377_MAP_G1.staticcall(input);
+    require(success, "error calling bls12377MapG1 precompile");
+    return getBytes32FromBytes(out, 0);
+  }
 }
