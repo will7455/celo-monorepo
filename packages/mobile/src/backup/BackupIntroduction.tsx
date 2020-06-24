@@ -8,7 +8,8 @@ import * as React from 'react'
 import { useTranslation } from 'react-i18next'
 import { ScrollView, StyleSheet, Text, View } from 'react-native'
 import SafeAreaView from 'react-native-safe-area-view'
-import { connect } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import { backupCompletedSelector } from 'src/account/selectors'
 import CeloAnalytics from 'src/analytics/CeloAnalytics'
 import { CustomEventNames } from 'src/analytics/constants'
 import { enterBackupFlow, exitBackupFlow } from 'src/app/actions'
@@ -21,28 +22,62 @@ import { emptyHeader, headerWithBackButton } from 'src/navigator/Headers.v2'
 import { navigate } from 'src/navigator/NavigationService'
 import { Screens } from 'src/navigator/Screens'
 import { StackParamList } from 'src/navigator/types'
-import { RootState } from 'src/redux/reducers'
 
-interface StateProps {
-  backupCompleted: boolean
-}
+type ScreenProps = StackScreenProps<StackParamList, Screens.BackupIntroduction>
+type Props = ScreenProps
 
-interface DispatchProps {
-  enterBackupFlow: typeof enterBackupFlow
-  exitBackupFlow: typeof exitBackupFlow
-}
+function BackupIntroduction({ route, navigation }: Props) {
+  const backupCompleted = useSelector(backupCompletedSelector)
+  const dispatch = useDispatch()
+  const { t } = useTranslation(Namespaces.backupKeyFlow6)
+  const fromAccountScreen = route.params?.fromAccountScreen
+  const accountKey = useAccountKey()
 
-type NavigationProps = StackScreenProps<StackParamList, Screens.BackupIntroduction>
-
-type Props = StateProps & DispatchProps & NavigationProps
-
-const mapStateToProps = (state: RootState): StateProps => {
-  return {
-    backupCompleted: state.account.backupCompleted,
+  function onPressBackup() {
+    CeloAnalytics.track(CustomEventNames.backup_start)
+    navigate(Screens.AccountKeyEducation)
   }
+
+  function goToAccountKeyGuide() {
+    navigate(Screens.AccountKeyEducation, { nextScreen: Screens.BackupIntroduction })
+  }
+
+  React.useEffect(() => {
+    dispatch(enterBackupFlow())
+    return () => {
+      dispatch(exitBackupFlow)
+    }
+  }, [])
+
+  return (
+    <SafeAreaView style={styles.container}>
+      {!fromAccountScreen && <DrawerTopBar />}
+      {backupCompleted ? (
+        <ScrollView contentContainerStyle={styles.postSetupContainer}>
+          <View>
+            <Text style={fontStyles.h2}>{t('postSetupTitle')}</Text>
+            <View style={styles.keyArea}>
+              <Text style={fontStyles.large}>{accountKey}</Text>
+            </View>
+            <Text style={styles.postSetupBody}>{t('postSetupBody')}</Text>
+          </View>
+          <View style={styles.postSetupCTA}>
+            <TextButton onPress={goToAccountKeyGuide}>{t('postSetupCTA')}</TextButton>
+          </View>
+        </ScrollView>
+      ) : (
+        <ScrollView contentContainerStyle={styles.introContainer}>
+          <Logo height={32} />
+          <Text style={styles.h1}>{t('introTitle')}</Text>
+          <Text style={styles.body}>{t('introBody')}</Text>
+          <Button text={t('introPrimaryAction')} onPress={onPressBackup} />
+        </ScrollView>
+      )}
+    </SafeAreaView>
+  )
 }
 
-export const navOptionsForAccount = ({ route }: NavigationProps) => {
+BackupIntroduction.navigationOptions = ({ route }: ScreenProps) => {
   if (route.params?.fromAccountScreen) {
     return headerWithBackButton
   }
@@ -54,76 +89,7 @@ export const navOptionsForAccount = ({ route }: NavigationProps) => {
   }
 }
 
-class BackupIntroduction extends React.Component<Props> {
-  componentDidMount() {
-    this.props.enterBackupFlow()
-  }
-
-  componentWillUnmount() {
-    this.props.exitBackupFlow()
-  }
-
-  onPressBackup = () => {
-    CeloAnalytics.track(CustomEventNames.backup_start)
-    navigate(Screens.AccountKeyEducation)
-  }
-
-  render() {
-    const { backupCompleted, route } = this.props
-    const fromAccountScreen = route.params?.fromAccountScreen
-    return (
-      <SafeAreaView style={styles.container}>
-        {!fromAccountScreen && <DrawerTopBar />}
-        {backupCompleted ? (
-          <AccountKeyPostSetup />
-        ) : (
-          <AccountKeyIntro onPrimaryPress={this.onPressBackup} />
-        )}
-      </SafeAreaView>
-    )
-  }
-}
-
-interface AccountKeyStartProps {
-  onPrimaryPress: () => void
-}
-
-function AccountKeyIntro({ onPrimaryPress }: AccountKeyStartProps) {
-  const { t } = useTranslation(Namespaces.backupKeyFlow6)
-  return (
-    <ScrollView contentContainerStyle={styles.introContainer}>
-      <Logo height={32} />
-      <Text style={styles.h1}>{t('introTitle')}</Text>
-      <Text style={styles.body}>{t('introBody')}</Text>
-      <Button text={t('introPrimaryAction')} onPress={onPrimaryPress} />
-    </ScrollView>
-  )
-}
-
-function AccountKeyPostSetup() {
-  const accountKey = useAccountKey()
-
-  const { t } = useTranslation(Namespaces.backupKeyFlow6)
-
-  return (
-    <ScrollView contentContainerStyle={styles.postSetupContainer}>
-      <View>
-        <Text style={fontStyles.h2}>{t('postSetupTitle')}</Text>
-        <View style={styles.keyArea}>
-          <Text style={fontStyles.large}>{accountKey}</Text>
-        </View>
-        <Text style={styles.postSetupBody}>{t('postSetupBody')}</Text>
-      </View>
-      <View style={styles.postSetupCTA}>
-        <TextButton onPress={goToAccountKeyGuide}>{t('postSetupCTA')}</TextButton>
-      </View>
-    </ScrollView>
-  )
-}
-
-function goToAccountKeyGuide() {
-  navigate(Screens.AccountKeyEducation, { nextScreen: Screens.BackupIntroduction })
-}
+export default BackupIntroduction
 
 const styles = StyleSheet.create({
   container: {
@@ -162,8 +128,3 @@ const styles = StyleSheet.create({
     paddingVertical: Spacing.Regular16,
   },
 })
-
-export default connect<StateProps, DispatchProps, {}, RootState>(mapStateToProps, {
-  enterBackupFlow,
-  exitBackupFlow,
-})(BackupIntroduction)
