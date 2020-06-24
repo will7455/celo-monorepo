@@ -1,0 +1,24 @@
+{
+  "name": "@celo/sdk",
+  "version": "1.0.0",
+  "description": "Celo SDK configuration layer for provider, wallet, and contracts modules",
+  "main": "./lib/index.js",
+  "types": "./lib/index.d.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build-uml": "yarn puml generate composition.puml --svg --output composition.svg"
+  },
+  "homepage": "https://github.com/celo-org/celo-monorepo/tree/master/packages/sdk",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/celo-org/celo-monorepo/tree/master/packages/sdk"
+  },
+  "keywords": [
+    "celo",
+    "blockchain",
+    "sdk",
+    "web3"
+  ],
+  "author": "cLabs",
+  "license": "Apache-2.0",
+}
