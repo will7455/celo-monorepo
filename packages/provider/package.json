@@ -5,6 +5,8 @@
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
   "scripts": {
+    "build": "tsc -b .",
+    "clean": "tsc -b . --clean"
   },
   "homepage": "https://github.com/celo-org/celo-monorepo/tree/master/packages/provider",
   "repository": {

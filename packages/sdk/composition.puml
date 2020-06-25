@@ -4,20 +4,23 @@ actor user
 
 participant "@celo/sdk"
 participant "@celo/provider"
-participant "@celo/contracts"
 participant "@celo/wallet"
+participant "@celo/contracts"
 
-user->"@celo/sdk":config(node-url,wallet-url?)
-"@celo/sdk"->"@celo/provider":init(node-url)
-"@celo/sdk"<--"@celo/provider":rpc-caller
+user->"@celo/sdk":config(node-url,wallet-url?,contracts?)
+"@celo/sdk"->"@celo/provider":init(node-url,wallet-url?)
+"@celo/provider"->"@celo/wallet":init(wallet-url)
+"@celo/provider"<--"@celo/wallet":wallet
+"@celo/sdk"<--"@celo/provider":provider{rpc-caller,wallet?}
 "@celo/sdk"->"@celo/contracts":init(rpc-caller)
 "@celo/sdk"<--"@celo/contracts":contracts
-"@celo/sdk"->"@celo/wallet":init(wallet-url)
-"@celo/sdk"<--"@celo/wallet":wallet
-user<--"@celo/sdk":sdk{rpc-caller,exporter?,contracts?,wallet?}
+user<--"@celo/sdk":sdk{provider,contracts?}
 
-user->"@celo/provider":rpc-caller.getLatestBlock()
+user->"@celo/provider":provider.rpc-caller.getLatestBlock()
 user<--"@celo/provider":100
+
+user->"@celo/provider":provider.rpc-caller.getBlock(100)
+user<--"@celo/provider":block{headers,tx-receipts}
 
 user->"@celo/contracts":contracts.parse(tx-receipt)
 user<--"@celo/contracts":call-details?,logs?
@@ -25,8 +28,10 @@ user<--"@celo/contracts":call-details?,logs?
 user->"@celo/contracts":contracts.election.vote(...)
 user<--"@celo/contracts":vote-tx
 
+user->"@celo/provider":rpc-caller.send(vote-tx)
+"@celo/provider"->"@celo/wallet":wallet.sign(vote-tx)
+"@celo/provider"<--"@celo/wallet":signed-vote-tx
+user<--"@celo/provider":tx-receipt
+
 user->"@celo/wallet":wallet.sign(vote-tx)
 user<--"@celo/wallet":signed-vote-tx
-
-user->"@celo/provider":rpc-caller.send(vote-tx)
-user<--"@celo/provider":vote-tx-hash

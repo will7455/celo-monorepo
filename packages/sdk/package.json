@@ -5,6 +5,8 @@
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
   "scripts": {
+    "build": "tsc -b .",
+    "clean": "tsc -b . --clean",
     "test": "echo \"Error: no test specified\" && exit 1",
     "build-uml": "yarn puml generate composition.puml --svg --output composition.svg"
   },
