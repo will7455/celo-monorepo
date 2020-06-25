@@ -1,0 +1,22 @@
+{
+  "name": "@celo/sdk",
+  "version": "1.0.0",
+  "description": "Celo Wallet package for managing keys and signing transaction data",
+  "main": "./lib/index.js",
+  "types": "./lib/index.d.ts",
+  "scripts": {
+  },
+  "homepage": "https://github.com/celo-org/celo-monorepo/tree/master/packages/wallet",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/celo-org/celo-monorepo/tree/master/packages/wallet"
+  },
+  "keywords": [
+    "celo",
+    "blockchain",
+    "sdk",
+    "web3"
+  ],
+  "author": "cLabs",
+  "license": "Apache-2.0"
+}

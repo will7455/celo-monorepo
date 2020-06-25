@@ -4,15 +4,12 @@ actor user
 
 participant "@celo/sdk"
 participant "@celo/provider"
-participant "@celo/exporter"
 participant "@celo/contracts"
 participant "@celo/wallet"
 
 user->"@celo/sdk":config(node-url,wallet-url?)
 "@celo/sdk"->"@celo/provider":init(node-url)
 "@celo/sdk"<--"@celo/provider":rpc-caller
-"@celo/sdk"->"@celo/exporter":init(rpc-caller)
-"@celo/sdk"<--"@celo/exporter":exporter
 "@celo/sdk"->"@celo/contracts":init(rpc-caller)
 "@celo/sdk"<--"@celo/contracts":contracts
 "@celo/sdk"->"@celo/wallet":init(wallet-url)
@@ -21,13 +18,6 @@ user<--"@celo/sdk":sdk{rpc-caller,exporter?,contracts?,wallet?}
 
 user->"@celo/provider":rpc-caller.getLatestBlock()
 user<--"@celo/provider":100
-
-user->"@celo/exporter":exporter.getBlock(100)
-activate "@celo/exporter"
-"@celo/exporter"->"@celo/provider":rpc-caller.getBlock(100)
-"@celo/exporter"<--"@celo/provider":raw-block
-deactivate "@celo/exporter"
-user<--"@celo/exporter":block{headers,tx-receipts}
 
 user->"@celo/contracts":contracts.parse(tx-receipt)
 user<--"@celo/contracts":call-details?,logs?

@@ -1,0 +1,22 @@
+{
+  "name": "@celo/contracts",
+  "version": "1.0.0",
+  "description": "Celo Contracts package for constructing transactions for deployed Celo Smart Contracts",
+  "main": "./lib/index.js",
+  "types": "./lib/index.d.ts",
+  "scripts": {
+  },
+  "homepage": "https://github.com/celo-org/celo-monorepo/tree/master/packages/contracts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/celo-org/celo-monorepo/tree/master/packages/contracts"
+  },
+  "keywords": [
+    "celo",
+    "blockchain",
+    "sdk",
+    "web3"
+  ],
+  "author": "cLabs",
+  "license": "Apache-2.0"
+}
