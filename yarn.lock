@@ -5788,15 +5788,15 @@
   dependencies:
     any-observable "^0.3.0"
 
-"@segment/analytics-react-native-firebase@^1.1.1-beta.2":
-  version "1.1.1-beta.2"
-  resolved "https://registry.yarnpkg.com/@segment/analytics-react-native-firebase/-/analytics-react-native-firebase-1.1.1-beta.2.tgz#94c386a028bbcea53a93f5278cca064a334099e5"
-  integrity sha512-5AYMS7a96DqzkP+wK7kL6c06KoxkFIJFZBqmTOAXmZMciuzPHaXcxifD0HgkxhPLFxyDjFWjulfyKNMBblOq+w==
+"@segment/analytics-react-native-firebase@^1.2.1":
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/@segment/analytics-react-native-firebase/-/analytics-react-native-firebase-1.2.1.tgz#9a8cd31c0481dc3201f0754653583f2bf5ad8f85"
+  integrity sha512-FVKcLBxf8HdtC4eYfh7JyUV+xAU852u1pk50Jysr8Ncx8DeNkK3mHWTGTb5ZSEXHDbf/l1qoc3A46qa3XIyyYg==
 
-"@segment/analytics-react-native@^1.1.1-beta.2":
-  version "1.1.1-beta.2"
-  resolved "https://registry.yarnpkg.com/@segment/analytics-react-native/-/analytics-react-native-1.1.1-beta.2.tgz#c88b3732bda559dd400de66d55ff4bd6bae58ab3"
-  integrity sha512-4M6mZGL/otACdCnTDjz28ZRiigOWCA3vk9ut0Z9idzMPRVLNoENuNh6rd4BiaditoWb3ktuqwdi8CW612h3DJA==
+"@segment/analytics-react-native@^1.2.1":
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/@segment/analytics-react-native/-/analytics-react-native-1.2.1.tgz#c03f4db65de6433ae53737753ff8438abc0efd36"
+  integrity sha512-06oOhHZy3CiWlkXHSZwkYLb24RR900mB9Itzut9SAIWZ+gwA18XMoGVdGb3MXcrJX2bievy3oRbkvKY3ehSvxA==
 
 "@sentry/apm@5.10.2":
   version "5.10.2"
@@ -28336,9 +28336,9 @@ react-native-gesture-handler@^1.6.1:
     invariant "^2.2.4"
     prop-types "^15.7.2"
 
-"react-native-geth@https://github.com/celo-org/react-native-geth#8583b07":
+"react-native-geth@https://github.com/celo-org/react-native-geth#e4b9d18":
   version "0.1.0-development"
-  resolved "https://github.com/celo-org/react-native-geth#8583b070005266ec544b58e5b7a476248292d89e"
+  resolved "https://github.com/celo-org/react-native-geth#e4b9d185b59c131c44064c68251aa6ef389fb86c"
 
 react-native-iphone-x-helper@^1.0.3, react-native-iphone-x-helper@^1.2.1:
   version "1.2.1"

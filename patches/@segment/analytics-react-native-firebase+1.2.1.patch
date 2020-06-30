@@ -1,0 +1,14 @@
+patch-package
+--- a/node_modules/@segment/analytics-react-native-firebase/android/build.gradle
++++ b/node_modules/@segment/analytics-react-native-firebase/android/build.gradle
+@@ -26,6 +26,10 @@ android {
+         versionName '1.0'
+ 
+     }
++
++    packagingOptions {
++        exclude 'META-INF/-no-jdk.kotlin_module'
++    }
+ }
+ 
+ repositories {
