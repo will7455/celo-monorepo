@@ -113,11 +113,11 @@ function* withdrawFromEscrow() {
       contractKit.contracts.getEscrow,
     ])
     const account: string = yield call(getConnectedUnlockedAccount)
-    const tmpWalletPrivateKey: string | null = yield select(
+    const tmpWalletPrivateKey: string = yield select(
       (state: RootState) => state.invite.redeemedInviteCode
     )
 
-    if (!tmpWalletPrivateKey || !isValidPrivateKey(tmpWalletPrivateKey)) {
+    if (!isValidPrivateKey(tmpWalletPrivateKey)) {
       Logger.warn(TAG + '@withdrawFromEscrow', 'Invalid private key, skipping escrow withdrawal')
       return
     }

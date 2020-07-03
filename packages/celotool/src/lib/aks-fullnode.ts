@@ -4,7 +4,7 @@ import {
   AzureClusterConfig,
   deallocateStaticIP,
   getAKSNodeResourceGroup,
-  registerStaticIPIfNotRegistered,
+  registerStaticIP,
 } from './azure'
 import { createNamespaceIfNotExists } from './cluster'
 import { execCmdWithExitOnFailure } from './cmd-utils'
@@ -113,7 +113,7 @@ async function allocateStaticIPs(celoEnv: string, clusterConfig: AzureClusterCon
 
   const staticIps = await Promise.all(
     range(replicaCount).map((i) =>
-      registerStaticIPIfNotRegistered(`${getStaticIPNamePrefix(celoEnv)}-${i}`, resourceGroup)
+      registerStaticIP(`${getStaticIPNamePrefix(celoEnv)}-${i}`, resourceGroup)
     )
   )
 

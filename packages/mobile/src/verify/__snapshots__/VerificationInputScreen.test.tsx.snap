@@ -4,7 +4,7 @@ exports[`VerificationInputScreen renders correctly 1`] = `
 <View
   style={
     Object {
-      "backgroundColor": "#F9F6F0",
+      "backgroundColor": "#F9F5ED",
       "flex": 1,
       "justifyContent": "space-between",
     }
@@ -369,7 +369,7 @@ exports[`VerificationInputScreen renders correctly 1`] = `
         style={
           Array [
             Object {
-              "backgroundColor": "#0768AE",
+              "backgroundColor": "#0C689C",
               "borderRadius": 4,
               "marginHorizontal": 16,
               "marginVertical": 16,

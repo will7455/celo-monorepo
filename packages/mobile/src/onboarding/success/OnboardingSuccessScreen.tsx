@@ -2,7 +2,6 @@ import colors from '@celo/react-components/styles/colors'
 import React from 'react'
 import { StyleSheet, View } from 'react-native'
 import DancingRings from 'src/icons/DancingRings'
-import { nuxNavigationOptionsNoBackButton } from 'src/navigator/Headers.v2'
 import { navigateHome } from 'src/navigator/NavigationService'
 
 function OnboardingSuccessScreen() {
@@ -13,8 +12,6 @@ function OnboardingSuccessScreen() {
   )
 }
 
-OnboardingSuccessScreen.navigationOptions = nuxNavigationOptionsNoBackButton
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -24,4 +21,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export default OnboardingSuccessScreen
+export default React.memo(OnboardingSuccessScreen)

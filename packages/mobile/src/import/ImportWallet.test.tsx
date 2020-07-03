@@ -35,14 +35,13 @@ describe('ImportWallet', () => {
           importBackupPhrase={importFn}
           hideAlert={jest.fn()}
           isImportingWallet={false}
-          connected={true}
           {...mockScreenProps}
           {...getMockI18nProps()}
         />
       </Provider>
     )
 
-    fireEvent(wrapper.getByTestId('ImportWalletBackupKeyInputField'), 'inputChange', mockMnemonic)
+    fireEvent.changeText(wrapper.getByTestId('ImportWalletBackupKeyInputField'), mockMnemonic)
     fireEvent.press(wrapper.getByTestId('ImportWalletButton'))
     expect(importFn).toHaveBeenCalledWith(mockMnemonic, false)
   })

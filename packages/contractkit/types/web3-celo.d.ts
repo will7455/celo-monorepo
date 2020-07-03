@@ -56,7 +56,11 @@ declare module 'web3-core-helpers' {
     jsonrpc: string
     id: number
     result?: any
-    // this shows us how we are using it, but there is no way of overriding the type of an attribute
-    error?: string | { message: string; code: number }
+    error?:
+      | string
+      | {
+          message: string
+          code: number
+        }
   }
 }

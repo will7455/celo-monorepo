@@ -82,7 +82,7 @@ export class CTextInput extends React.Component<Props, State> {
           onFocus={this.handleInputFocus}
           onBlur={this.handleInputBlur}
         />
-        {!passThroughProps.multiline && isFocused && !!value && showClearButton && (
+        {isFocused && !!value && showClearButton && (
           <CircleButton
             style={styles.icon}
             onPress={this.onClear}

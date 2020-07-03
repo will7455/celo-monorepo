@@ -14,7 +14,7 @@ import { PROMOTE_REWARDS_APP } from 'src/config'
 import { EscrowedPayment } from 'src/escrow/actions'
 import EscrowedPaymentReminderSummaryNotification from 'src/escrow/EscrowedPaymentReminderSummaryNotification'
 import { getReclaimableEscrowPayments } from 'src/escrow/reducer'
-import { pausedFeatures } from 'src/flags'
+import { setEducationCompleted as setGoldEducationCompleted } from 'src/goldToken/actions'
 import { Namespaces, withTranslation } from 'src/i18n'
 import BackupKeyIcon from 'src/icons/BackupKeyIcon'
 import { getVerifiedIcon, homeIcon, inviteFriendsIcon, rewardsAppIcon } from 'src/images/Images'
@@ -46,6 +46,7 @@ interface DispatchProps {
   dismissEarnRewards: typeof dismissEarnRewards
   dismissInviteFriends: typeof dismissInviteFriends
   dismissGetVerified: typeof dismissGetVerified
+  setGoldEducationCompleted: typeof setGoldEducationCompleted
 }
 
 type Props = DispatchProps & StateProps & WithTranslation
@@ -68,6 +69,7 @@ const mapDispatchToProps = {
   dismissEarnRewards,
   dismissInviteFriends,
   dismissGetVerified,
+  setGoldEducationCompleted,
 }
 
 interface State {
@@ -212,7 +214,7 @@ export class NotificationBox extends React.Component<Props, State> {
       })
     }
 
-    if (!dismissedInviteFriends && !pausedFeatures.INVITE) {
+    if (!dismissedInviteFriends) {
       actions.push({
         title: t('inviteFlow11:inviteFriendsToCelo'),
         text: t('inviteFlow11:inviteAnyone'),

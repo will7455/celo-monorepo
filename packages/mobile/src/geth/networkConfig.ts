@@ -10,7 +10,6 @@ export enum Testnets {
   pilotstaging = 'pilotstaging',
   baklavastaging = 'baklavastaging',
   baklava = 'baklava',
-  mainnet = 'mainnet',
 }
 
 interface NetworkConfig {
@@ -54,7 +53,7 @@ const networkConfigs: { [testnet: string]: NetworkConfig } = {
     nodeDir: `.${Testnets.alfajores}`,
     syncMode: DEFAULT_SYNC_MODE,
     initiallyForno: FORNO_ENABLED_INITIALLY,
-    blockchainApiUrl: 'https://blockchain-api-dot-celo-mobile-alfajores.appspot.com/',
+    blockchainApiUrl: 'https://alfajores-dot-celo-testnet-production.appspot.com/',
     pgpnpUrl: pgpnpUrlProd,
     pgpnpPubKey: pgpnpPubKeyProd,
     signMoonpayUrl: signMoonpayUrlStaging,
@@ -94,15 +93,6 @@ const networkConfigs: { [testnet: string]: NetworkConfig } = {
     pgpnpUrl: pgpnpUrlStaging,
     pgpnpPubKey: pgpnpPubKeyStaging,
     signMoonpayUrl: signMoonpayUrlStaging,
-  },
-  [Testnets.mainnet]: {
-    nodeDir: `.${Testnets.mainnet}`,
-    syncMode: DEFAULT_SYNC_MODE,
-    initiallyForno: FORNO_ENABLED_INITIALLY,
-    blockchainApiUrl: 'https://blockchain-api-dot-celo-mobile-mainnet.appspot.com/',
-    pgpnpUrl: pgpnpUrlProd,
-    pgpnpPubKey: pgpnpPubKeyProd,
-    signMoonpayUrl: signMoonpayUrlStaging, // TODO
   },
 }
 

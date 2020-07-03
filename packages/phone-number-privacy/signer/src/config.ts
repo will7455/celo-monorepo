@@ -67,12 +67,13 @@ interface Config {
     aws: {
       region: string
       secretName: string
+      secretKey: string
     }
   }
 }
 
-export const toNum = (value: BigNumber.Value) => new BigNumber(value).toNumber()
-export const toBool = (value: string | undefined, fallback: boolean) =>
+const toNum = (value: BigNumber.Value) => new BigNumber(value).toNumber()
+const toBool = (value: string | undefined, fallback: boolean) =>
   value ? value.toLowerCase() === 'true' : fallback
 
 const env = process.env as any
@@ -120,6 +121,7 @@ const config: Config = {
     aws: {
       region: env.KEYSTORE_AWS_REGION,
       secretName: env.KEYSTORE_AWS_SECRET_NAME || 'signer-secret',
+      secretKey: env.KEYSTORE_AWS_SECRET_KEY || 'key',
     },
   },
 }

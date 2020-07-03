@@ -30,6 +30,7 @@ export default class EX extends React.PureComponent<Props> {
           stroke={color}
           strokeWidth={strokeWidth}
         />
+        />
       </Svg>
     )
   }

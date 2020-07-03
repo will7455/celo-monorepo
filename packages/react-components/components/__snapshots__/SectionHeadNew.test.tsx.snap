@@ -3,17 +3,14 @@
 exports[`renders text 1`] = `
 <View
   style={
-    Array [
-      Object {
-        "alignItems": "center",
-        "backgroundColor": "#FFFFFF",
-        "flexDirection": "row",
-        "justifyContent": "space-between",
-        "paddingHorizontal": 16,
-        "paddingVertical": 8,
-      },
-      undefined,
-    ]
+    Object {
+      "alignItems": "center",
+      "backgroundColor": "#FFFFFF",
+      "flexDirection": "row",
+      "justifyContent": "space-between",
+      "paddingHorizontal": 16,
+      "paddingVertical": 8,
+    }
   }
 >
   <Text

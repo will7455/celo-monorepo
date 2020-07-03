@@ -53,7 +53,7 @@ function toRPCResponse(payload: JsonRpcPayload, result: any, error?: Error): Jso
   }
 
   if (error != null) {
-    ;(response.error as any) = {
+    ;(response as any).error = {
       message: error.message || error.stack || error,
       code: -32000,
     }
@@ -99,9 +99,9 @@ export class DefaultRpcCaller implements RpcCaller {
         result &&
         result.error != null &&
         typeof result.error !== 'string' &&
-        (result.error as any).message != null
+        result.error.message != null
       ) {
-        err = new Error((result.error as any).message)
+        err = new Error(result.error.message)
       }
       callback(err as any, result)
     }) as Callback<JsonRpcResponse>

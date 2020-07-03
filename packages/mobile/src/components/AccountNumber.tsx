@@ -43,7 +43,7 @@ export default function AccountNumber({ address, touchDisabled }: Props) {
 
 const styles = StyleSheet.create({
   container: {
-    width: 215,
+    width: 200,
   },
   text: {
     ...fontStyles.small,

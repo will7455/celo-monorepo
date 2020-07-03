@@ -33,40 +33,32 @@ type Props = ScreenProps
 function VerificationEducationScreen({ route, navigation }: Props) {
   const showSkipDialog = route.params?.showSkipDialog || false
   const [showLearnMoreDialog, setShowLearnMoreDialog] = useState(false)
-  const [hasPressedStart, setHasPressedStart] = useState(false)
   const { t } = useTranslation(Namespaces.onboarding)
   const userBalance = useSelector((state) => state.stableToken.balance)
   const balanceIsSufficient = isUserBalanceSufficient(userBalance, VERIFICATION_FEE_ESTIMATE)
-  // For now only show error if user has pressed start
-  // with the idea being that by the time the user is done reading the screen the balance will already be known
-  const showError = hasPressedStart && !balanceIsSufficient
   const dispatch = useDispatch()
   const headerHeight = useHeaderHeight()
   const insets = useSafeArea()
 
-  const onPressStart = () => {
-    setHasPressedStart(true)
-    if (!balanceIsSufficient) {
-      return
-    }
+  function onPressStart() {
     dispatch(setHasSeenVerificationNux(true))
     navigation.navigate(Screens.VerificationLoadingScreen)
   }
 
-  const onPressSkipCancel = () => {
+  function onPressSkipCancel() {
     navigation.setParams({ showSkipDialog: false })
   }
 
-  const onPressSkipConfirm = () => {
+  function onPressSkipConfirm() {
     dispatch(setHasSeenVerificationNux(true))
     navigateHome()
   }
 
-  const onPressLearnMore = () => {
+  function onPressLearnMore() {
     setShowLearnMoreDialog(true)
   }
 
-  const onPressLearnMoreDismiss = () => {
+  function onPressLearnMoreDismiss() {
     setShowLearnMoreDialog(false)
   }
 
@@ -82,17 +74,15 @@ function VerificationEducationScreen({ route, navigation }: Props) {
         <Text style={styles.body}>{t('verificationEducation.body')}</Text>
         <Button
           text={t('verificationEducation.start')}
-          disabled={showError}
+          disabled={!balanceIsSufficient}
           onPress={onPressStart}
           type={BtnTypes.ONBOARDING}
           style={styles.startButton}
           testID="VerificationEducationContinue"
         />
-        {showError && (
-          <ErrorMessageInline
-            error={balanceIsSufficient ? null : ErrorMessages.INSUFFICIENT_BALANCE}
-          />
-        )}
+        <ErrorMessageInline
+          error={balanceIsSufficient ? null : ErrorMessages.INSUFFICIENT_BALANCE}
+        />
         <View style={styles.spacer} />
         <TextButton style={styles.learnMoreButton} onPress={onPressLearnMore}>
           {t('verificationEducation.learnMore')}

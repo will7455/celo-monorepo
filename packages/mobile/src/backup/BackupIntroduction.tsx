@@ -43,7 +43,7 @@ const mapStateToProps = (state: RootState): StateProps => {
 }
 
 export const navOptionsForAccount = ({ route }: NavigationProps) => {
-  if (route.params?.fromSettings) {
+  if (route.params?.fromAccountScreen) {
     return headerWithBackButton
   }
 
@@ -70,10 +70,10 @@ class BackupIntroduction extends React.Component<Props> {
 
   render() {
     const { backupCompleted, route } = this.props
-    const fromSettings = route.params?.fromSettings
+    const fromAccountScreen = route.params?.fromAccountScreen
     return (
       <SafeAreaView style={styles.container}>
-        {!fromSettings && <DrawerTopBar />}
+        {!fromAccountScreen && <DrawerTopBar />}
         {backupCompleted ? (
           <AccountKeyPostSetup />
         ) : (

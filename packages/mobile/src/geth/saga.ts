@@ -151,7 +151,7 @@ export function* initGethSaga() {
     if (yield select(promptFornoIfNeededSelector)) {
       CeloAnalytics.track(CustomEventNames.prompt_forno, { context: `Geth init error ${result}` })
       yield put(setPromptForno(false))
-      navigate(Screens.Settings, { promptFornoModal: true })
+      navigate(Screens.DataSaver, { promptModalVisible: true })
     } else {
       navigateToError('networkConnectionFailed')
     }

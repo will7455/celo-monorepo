@@ -163,7 +163,7 @@ exports[`RegulatoryTermsScreen renders correctly 1`] = `
         style={
           Object {
             "alignItems": "center",
-            "backgroundColor": "#D6EAF3",
+            "backgroundColor": "#D6E7EF",
             "flexGrow": 1,
             "height": 48,
             "justifyContent": "center",
@@ -177,7 +177,7 @@ exports[`RegulatoryTermsScreen renders correctly 1`] = `
         <Text
           style={
             Object {
-              "color": "#0768AE",
+              "color": "#0C689C",
               "fontFamily": "Inter-SemiBold",
               "fontSize": 16,
               "lineHeight": 22,

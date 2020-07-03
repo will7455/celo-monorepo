@@ -1,13 +1,12 @@
 import PulsingDot from '@celo/react-components/components/PulsingDot'
-import colors from '@celo/react-components/styles/colors.v2'
-import fontStyles from '@celo/react-components/styles/fonts.v2'
+import colors from '@celo/react-components/styles/colors'
+import fontStyles from '@celo/react-components/styles/fonts'
 import * as React from 'react'
 import { WithTranslation } from 'react-i18next'
 import { ScrollView, StyleSheet, Text, View } from 'react-native'
 import SafeAreaView from 'react-native-safe-area-view'
 import { isE2EEnv } from 'src/config'
 import { Namespaces, withTranslation } from 'src/i18n'
-import { noHeaderGestureDisabled } from 'src/navigator/Headers.v2'
 import { navigate } from 'src/navigator/NavigationService'
 import { Screens } from 'src/navigator/Screens'
 
@@ -20,7 +19,7 @@ const AnimatedCircle = () => (
 )
 
 class VerificationInterstitialScreen extends React.Component<WithTranslation> {
-  static navigationOptions = noHeaderGestureDisabled
+  static navigationOptions = { gestureEnabled: false, header: null }
 
   timeout: number | undefined
 
@@ -44,7 +43,7 @@ class VerificationInterstitialScreen extends React.Component<WithTranslation> {
             <AnimatedCircle />
             <AnimatedCircle />
           </View>
-          <Text style={fontStyles.h2}>{t('interstitial.header')}</Text>
+          <Text style={fontStyles.h1}>{t('interstitial.header')}</Text>
           <Text style={styles.bodyText}>{t('interstitial.body1')}</Text>
           <Text style={styles.bodyText}>{t('interstitial.body2')}</Text>
         </ScrollView>
@@ -57,7 +56,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'space-between',
-    backgroundColor: colors.onboardingBackground,
+    backgroundColor: colors.background,
   },
   scrollContainer: {
     flex: 1,
@@ -81,8 +80,9 @@ const styles = StyleSheet.create({
     width: 12 * 3,
   },
   bodyText: {
-    ...fontStyles.regular,
-    marginTop: 20,
+    ...fontStyles.bodyLarge,
+    ...fontStyles.center,
+    marginBottom: 20,
   },
 })
 

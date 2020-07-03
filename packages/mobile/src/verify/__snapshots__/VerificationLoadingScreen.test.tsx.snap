@@ -4,7 +4,7 @@ exports[`VerificationLoadingScreen renders correctly 1`] = `
 <SafeAreaView
   style={
     Object {
-      "backgroundColor": "#F9F6F0",
+      "backgroundColor": "#FAFAFA",
       "flex": 1,
     }
   }
@@ -21,7 +21,6 @@ exports[`VerificationLoadingScreen renders correctly 1`] = `
         Object {
           "left": 5,
           "position": "absolute",
-          "top": 10,
           "zIndex": 1,
         }
       }
@@ -82,6 +81,34 @@ exports[`VerificationLoadingScreen renders correctly 1`] = `
       }
     >
       <View>
+        <SafeAreaView
+          style={
+            Object {
+              "height": 35,
+              "paddingRight": 10,
+              "paddingTop": 10,
+              "position": "absolute",
+              "right": 0,
+              "top": 0,
+              "width": 70,
+              "zIndex": 100,
+            }
+          }
+        >
+          <Text
+            accessible={true}
+            focusable={true}
+            onClick={[Function]}
+            onResponderGrant={[Function]}
+            onResponderMove={[Function]}
+            onResponderRelease={[Function]}
+            onResponderTerminate={[Function]}
+            onResponderTerminationRequest={[Function]}
+            onStartShouldSetResponder={[Function]}
+          >
+               
+          </Text>
+        </SafeAreaView>
         <View
           style={
             Object {
@@ -127,9 +154,9 @@ exports[`VerificationLoadingScreen renders correctly 1`] = `
             style={
               Object {
                 "color": "#2E3338",
-                "fontFamily": "Inter-SemiBold",
+                "fontFamily": "Hind-SemiBold",
                 "fontSize": 16,
-                "lineHeight": 22,
+                "lineHeight": 24,
                 "marginTop": 20,
               }
             }
@@ -140,10 +167,10 @@ exports[`VerificationLoadingScreen renders correctly 1`] = `
             style={
               Object {
                 "color": "#2E3338",
-                "fontFamily": "Inter-Regular",
+                "fontFamily": "Hind-Regular",
                 "fontSize": 16,
-                "lineHeight": 22,
-                "marginTop": 10,
+                "lineHeight": 24,
+                "marginTop": 5,
               }
             }
           >
@@ -397,7 +424,7 @@ exports[`VerificationLoadingScreen renders correctly with fail modal 1`] = `
 <SafeAreaView
   style={
     Object {
-      "backgroundColor": "#F9F6F0",
+      "backgroundColor": "#FAFAFA",
       "flex": 1,
     }
   }
@@ -414,7 +441,6 @@ exports[`VerificationLoadingScreen renders correctly with fail modal 1`] = `
         Object {
           "left": 5,
           "position": "absolute",
-          "top": 10,
           "zIndex": 1,
         }
       }
@@ -475,6 +501,34 @@ exports[`VerificationLoadingScreen renders correctly with fail modal 1`] = `
       }
     >
       <View>
+        <SafeAreaView
+          style={
+            Object {
+              "height": 35,
+              "paddingRight": 10,
+              "paddingTop": 10,
+              "position": "absolute",
+              "right": 0,
+              "top": 0,
+              "width": 70,
+              "zIndex": 100,
+            }
+          }
+        >
+          <Text
+            accessible={true}
+            focusable={true}
+            onClick={[Function]}
+            onResponderGrant={[Function]}
+            onResponderMove={[Function]}
+            onResponderRelease={[Function]}
+            onResponderTerminate={[Function]}
+            onResponderTerminationRequest={[Function]}
+            onStartShouldSetResponder={[Function]}
+          >
+               
+          </Text>
+        </SafeAreaView>
         <View
           style={
             Object {
@@ -520,9 +574,9 @@ exports[`VerificationLoadingScreen renders correctly with fail modal 1`] = `
             style={
               Object {
                 "color": "#2E3338",
-                "fontFamily": "Inter-SemiBold",
+                "fontFamily": "Hind-SemiBold",
                 "fontSize": 16,
-                "lineHeight": 22,
+                "lineHeight": 24,
                 "marginTop": 20,
               }
             }
@@ -533,10 +587,10 @@ exports[`VerificationLoadingScreen renders correctly with fail modal 1`] = `
             style={
               Object {
                 "color": "#2E3338",
-                "fontFamily": "Inter-Regular",
+                "fontFamily": "Hind-Regular",
                 "fontSize": 16,
-                "lineHeight": 22,
-                "marginTop": 10,
+                "lineHeight": 24,
+                "marginTop": 5,
               }
             }
           >

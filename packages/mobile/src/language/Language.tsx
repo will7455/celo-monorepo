@@ -4,7 +4,7 @@ import fontStyles from '@celo/react-components/styles/fonts.v2'
 import { StackScreenProps } from '@react-navigation/stack'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { FlatList, ListRenderItemInfo, ScrollView, StyleSheet, Text } from 'react-native'
+import { ScrollView, StyleSheet, Text } from 'react-native'
 import SafeAreaView from 'react-native-safe-area-view'
 import { useDispatch } from 'react-redux'
 import CeloAnalytics from 'src/analytics/CeloAnalytics'
@@ -12,54 +12,25 @@ import { CustomEventNames } from 'src/analytics/constants'
 import { setLanguage } from 'src/app/actions'
 import { AVAILABLE_LANGUAGES } from 'src/config'
 import { Namespaces } from 'src/i18n'
-import { emptyHeader, headerWithBackButton } from 'src/navigator/Headers.v2'
 import { navigate, navigateBack } from 'src/navigator/NavigationService'
 import { Screens } from 'src/navigator/Screens'
 import { StackParamList } from 'src/navigator/types'
 
-type ScreenProps = StackScreenProps<StackParamList, Screens.Language>
-type Props = ScreenProps
+type Props = StackScreenProps<StackParamList, Screens.Language>
 
-interface Language {
-  code: string
-  name: string
-}
-
-function keyExtractor(item: Language) {
-  return item.code
-}
-
-function LanguageScreen({ route }: Props) {
+export default function Language({ route }: Props) {
   const dispatch = useDispatch()
   const { t, i18n } = useTranslation(Namespaces.accountScreen10)
-  const fromSettings = route.params?.fromSettings
 
-  const onSelect = (language: string, code: string) => {
+  function onSelect(language: string, code: string) {
     CeloAnalytics.track(CustomEventNames.language_select, { language, selectedAnswer: code })
+    const nextScreen = route.params?.nextScreen ?? Screens.JoinCelo
     dispatch(setLanguage(code))
-    // Wait for next frame before navigating back
-    // so the user can see the changed selection briefly
-    requestAnimationFrame(() => {
-      if (fromSettings) {
-        navigateBack()
-      } else {
-        navigate(Screens.JoinCelo)
-      }
-    })
-  }
-
-  const renderItem = ({ item: language }: ListRenderItemInfo<Language>) => {
-    return (
-      <SelectionOption
-        hideCheckboxes={!fromSettings}
-        text={language.name}
-        key={language.code}
-        onSelect={onSelect}
-        isSelected={language.code === i18n.language}
-        data={language.code}
-        testID={`ChooseLanguage/${language.code}`}
-      />
-    )
+    if (nextScreen === 'GO_BACK') {
+      navigateBack()
+    } else {
+      navigate(nextScreen)
+    }
   }
 
   return (
@@ -68,19 +39,19 @@ function LanguageScreen({ route }: Props) {
         <Text style={styles.title} testID={'ChooseLanguageTitle'}>
           {t('selectLanguage')}
         </Text>
-        <FlatList
-          data={AVAILABLE_LANGUAGES}
-          extraData={i18n.language}
-          renderItem={renderItem}
-          keyExtractor={keyExtractor}
-        />
+        {AVAILABLE_LANGUAGES.map((language) => (
+          <SelectionOption
+            text={language.name}
+            key={language.code}
+            onSelect={onSelect}
+            isSelected={language.code === i18n.language}
+            data={language.code}
+            testID={`ChooseLanguage/${language.code}`}
+          />
+        ))}
       </SafeAreaView>
     </ScrollView>
   )
-}
-
-LanguageScreen.navigationOptions = ({ navigation }: ScreenProps) => {
-  return navigation.canGoBack() ? headerWithBackButton : emptyHeader
 }
 
 const styles = StyleSheet.create({
@@ -90,8 +61,7 @@ const styles = StyleSheet.create({
   },
   title: {
     ...fontStyles.h2,
-    margin: 16,
+    marginHorizontal: 16,
+    marginVertical: 16,
   },
 })
-
-export default LanguageScreen

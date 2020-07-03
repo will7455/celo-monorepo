@@ -1,5 +1,5 @@
 runtime: nodejs10
-service: notification
+service: alfajoresstaging
 instance_class: B4
 manual_scaling:
   instances: 1

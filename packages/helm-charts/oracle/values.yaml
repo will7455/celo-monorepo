@@ -39,9 +39,10 @@ oracle:
   aggregation:
     mid:
       maxExchangeVolumeShare: 1
-      askMaxPercentageDeviation: 0.05
-      bidMaxPercentageDeviation: 0.05
-      maxPercentageBidAskSpread: 0.025
+      # askMaxPercentageDeviation
+      # bidMaxPercentageDeviation
+      # maxExchangeVolumeShare
+      # maxPercentageBidAskSpread
       # minReportPriceChangeThreshold
     trades:
       periodMs: 300000
@@ -57,7 +58,7 @@ oracle:
   allowNotCGLD: false
   apiRequestTimeoutMs: 5000
   circuitBreakerPriceChangeThreshold: 0.25
-  exchanges: BITTREX,OKCOIN
+  exchanges: BITTREX
   reportStrategy: BLOCK_BASED
   reporter:
     blockBased:

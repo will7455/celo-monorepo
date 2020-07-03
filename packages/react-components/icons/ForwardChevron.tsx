@@ -1,18 +1,16 @@
-import colors from '@celo/react-components/styles/colors.v2'
+import colors from '@celo/react-components/styles/colors'
 import * as React from 'react'
 import Svg, { Path } from 'svgs'
 
 interface Props {
   height?: number
-  width?: number
   color?: string
 }
 
 export default class ForwardChevron extends React.PureComponent<Props> {
   static defaultProps = {
-    height: 20,
-    width: 10,
-    color: colors.gray3,
+    height: 50,
+    color: colors.celoGreen,
   }
 
   render() {
@@ -20,7 +18,7 @@ export default class ForwardChevron extends React.PureComponent<Props> {
       <Svg
         xmlns="http://www.w3.org/2000/svg"
         height={this.props.height}
-        width={this.props.width}
+        width={this.props.height}
         viewBox="0 0 15 16"
       >
         <Path

@@ -17,6 +17,7 @@
   "tip": "Punta: ",
   "warning": "Advertencia ",
   "downloadRewards": "Descargar Recompensas Celo",
+  "chooseLanguage": "Elegir idioma",
   "wallet": "Monedero",
   "send": "Envío",
   "search": "Buscar",
@@ -26,7 +27,7 @@
   "activity": "Actividad",
   "history": "Historial",
   "notEnoughDollarsError": "No hay suficientes {{CeloDollars}} para cambiarlos",
-  "notEnoughGoldError": "No hay suficiente CELO para cambiarlo",
+  "notEnoughGoldError": "No hay suficiente Celo Oro para cambiarlo",
   "exchangeFailed": "Intercambio fallido, por favor vuelva a intentarlo",
   "transactionFailed": "Transacción fallido, por favor vuelva a intentarlo",
   "refreshFailedUnexpectedly": "Error al actualizar, por favor revise tu conectividad",
@@ -39,7 +40,7 @@
   "sendCeloDollars": "Enviar {{CeloDollars}}",
   "startEarning": "Comenzar a ganar",
   "backToWallet": "Volver a el Monedero",
-  "exchangeForGold": "Cambiar a CELO",
+  "exchangeForGold": "Cambiar a Oro",
   "missingFullName": "El nombre no puede estar vacío",
   "invalidPhone": "Número de teléfono inválido",
   "cantSelectInvalidPhone": "No se puede seleccionar el contacto: número de teléfono no válido",
@@ -65,7 +66,7 @@
   "to": "Para",
   "for": "Por",
   "reclaim": "Reclaim",
-  "celoGold": "CELO",
+  "celoGold": "Celo Oro",
   "celoDollars": "{{CeloDollars}}",
   "balanceAvailable": "<0></0> disponibles",
   "subtotal": "Total parcial",
@@ -173,6 +174,5 @@
   "review": "Revisión",
   "insufficientBalance": "Su saldo es demasiado bajo para realizar esta transacción.",
   "amount": "Monto",
-  "currentBalance": "Saldo actual",
-  "restore": "Restaurar"
+  "currentBalance": "Saldo actual"
 }
