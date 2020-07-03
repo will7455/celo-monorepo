@@ -71,8 +71,8 @@ interface Config {
   }
 }
 
-const toNum = (value: BigNumber.Value) => new BigNumber(value).toNumber()
-const toBool = (value: string | undefined, fallback: boolean) =>
+export const toNum = (value: BigNumber.Value) => new BigNumber(value).toNumber()
+export const toBool = (value: string | undefined, fallback: boolean) =>
   value ? value.toLowerCase() === 'true' : fallback
 
 const env = process.env as any
