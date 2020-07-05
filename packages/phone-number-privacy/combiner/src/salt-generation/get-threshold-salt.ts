@@ -1,8 +1,13 @@
+import {
+  ErrorMessage,
+  SignMessageResponse,
+  WarningMessage,
+} from '@celo/phone-number-privacy-common'
 import AbortController from 'abort-controller'
 import { Request, Response } from 'firebase-functions'
 import fetch, { Response as FetchResponse } from 'node-fetch'
-import { BLSCryptographyClient, ServicePartialSignature } from '../bls/bls-cryptography-client'
-import { ErrorMessages, respondWithError } from '../common/error-utils'
+import { BLSCryptographyClient } from '../bls/bls-cryptography-client'
+import { respondWithError } from '../common/error-utils'
 import { authenticateUser } from '../common/identity'
 import {
   hasValidAccountParam,
@@ -21,19 +26,13 @@ interface GetBlindedMessageForSaltRequest {
   hashedPhoneNumber?: string
 }
 
-interface SignMessageResponse {
-  success: boolean
-  signature: string
-  version: string
-}
-
 interface SignerService {
   url: string
 }
 
 interface SignMsgRespWithStatus {
   url: string
-  signature?: string
+  signMessageResponse?: SignMessageResponse
   status: number
 }
 
@@ -43,27 +42,24 @@ export async function handleGetDistributedBlindedMessageForSalt(
 ) {
   try {
     if (!isValidGetSignatureInput(request.body)) {
-      respondWithError(response, 400, ErrorMessages.INVALID_INPUT)
+      respondWithError(response, 400, WarningMessage.INVALID_INPUT)
       return
     }
     if (!authenticateUser(request)) {
-      respondWithError(response, 401, ErrorMessages.UNAUTHENTICATED_USER)
+      respondWithError(response, 401, WarningMessage.UNAUTHENTICATED_USER)
       return
     }
-    const { successCount, majorityErrorCode } = await requestSignatures(request, response)
-    if (successCount < config.thresholdSignature.threshold) {
-      handleMissingSignatures(majorityErrorCode, response)
-    }
+    logger.debug('Requesting signatures')
+    await requestSignatures(request, response)
   } catch (e) {
-    respondWithError(response, 500, ErrorMessages.UNKNOWN_ERROR)
+    respondWithError(response, 500, ErrorMessage.UNKNOWN_ERROR)
   }
 }
 
 async function requestSignatures(request: Request, response: Response) {
-  let successCount = 0
   const responses: SignMsgRespWithStatus[] = []
-  const signatures: ServicePartialSignature[] = []
   const errorCodes: Map<number, number> = new Map()
+  const blsCryptoClient = new BLSCryptographyClient()
 
   const signers = JSON.parse(config.pgpnpServices.signers) as SignerService[]
   const signerReqs = signers.map((service) => {
@@ -78,17 +74,19 @@ async function requestSignatures(request: Request, response: Response) {
         const status = res.status
         if (res.ok) {
           const signResponse = (await res.json()) as SignMessageResponse
-          responses.push({ url: service.url, signature: signResponse.signature, status })
-          signatures.push({ url: service.url, signature: signResponse.signature })
-          successCount += 1
+          if (!signResponse.signature) {
+            throw new Error('Response successful, but signature is missing')
+          }
+          responses.push({ url: service.url, signMessageResponse: signResponse, status })
+          const partialSig = { url: service.url, signature: signResponse.signature }
+          await blsCryptoClient.addSignature(partialSig, request.body.blindedQueryPhoneNumber)
           // Send response immediately once we cross threshold
-          if (!sentResult && successCount >= config.thresholdSignature.threshold) {
-            sentResult = true
-            const combinedSignature = await BLSCryptographyClient.combinePartialBlindedSignatures(
-              signatures,
-              request.body.blindedQueryPhoneNumber
-            )
-            response.json({ success: true, combinedSignature, version: VERSION })
+          if (!sentResult && blsCryptoClient.sufficientVerifiedSignatures()) {
+            const combinedSignature = await blsCryptoClient.combinePartialBlindedSignatures()
+            if (!sentResult) {
+              response.json({ success: true, combinedSignature, version: VERSION })
+              sentResult = true
+            }
           }
         } else {
           responses.push({ url: service.url, status })
@@ -97,9 +95,9 @@ async function requestSignatures(request: Request, response: Response) {
       })
       .catch((e) => {
         if (e.name === 'AbortError') {
-          logger.error(`${ErrorMessages.TIMEOUT_FROM_SIGNER} from signer ${service.url}`)
+          logger.error(`${ErrorMessage.TIMEOUT_FROM_SIGNER} from signer ${service.url}`)
         } else {
-          logger.error(`${ErrorMessages.SIGNER_RETURN_ERROR} from signer ${service.url}`, e)
+          logger.error(`${ErrorMessage.ERROR_REQUESTING_SIGNATURE} from signer ${service.url}`, e)
           responses.push({ url: service.url, status: 500 })
         }
       })
@@ -110,9 +108,45 @@ async function requestSignatures(request: Request, response: Response) {
 
   await Promise.all(signerReqs)
 
+  logQuotaDiscrepancies(responses)
   const majorityErrorCode = getMajorityErrorCode(errorCodes, responses)
+  if (!blsCryptoClient.sufficientVerifiedSignatures()) {
+    handleMissingSignatures(majorityErrorCode, response)
+  }
+}
 
-  return { successCount, majorityErrorCode }
+function logQuotaDiscrepancies(responses: SignMsgRespWithStatus[]) {
+  // Only compare responses which have values for the quota fields
+  const successfulResponses = responses.filter(
+    (response) =>
+      response.status === 200 &&
+      response.signMessageResponse &&
+      response.signMessageResponse.performedQueryCount &&
+      response.signMessageResponse.totalQuota
+  )
+
+  if (successfulResponses.length === 0) {
+    return
+  }
+  // Compare the first response to the rest of the responses
+  const expectedQueryCount = successfulResponses[0].signMessageResponse?.performedQueryCount
+  const expectedTotalQuota = successfulResponses[0].signMessageResponse?.totalQuota
+  successfulResponses.forEach((resp) => {
+    if (
+      resp.signMessageResponse?.performedQueryCount !== expectedQueryCount ||
+      resp.signMessageResponse?.totalQuota !== expectedTotalQuota
+    ) {
+      const values = successfulResponses.map((response) => {
+        return {
+          signer: response.url,
+          performedQueryCount: response.signMessageResponse?.performedQueryCount,
+          totalQuota: response.signMessageResponse?.totalQuota,
+        }
+      })
+      logger.error(`Discepancy found in signers' measured quotas ${values}`)
+      return
+    }
+  })
 }
 
 function requestSignature(
@@ -134,7 +168,7 @@ function requestSignature(
 
 function getMajorityErrorCode(errorCodes: Map<number, number>, responses: SignMsgRespWithStatus[]) {
   if (errorCodes.size > 1) {
-    logger.error(ErrorMessages.INCONSISTENT_SINGER_RESPONSES)
+    logger.error(ErrorMessage.INCONSISTENT_SINGER_RESPONSES)
     responses.forEach((resp) => {
       logger.error(`${resp.url} returned ${resp.status}`)
     })
@@ -164,12 +198,8 @@ function isValidGetSignatureInput(requestBody: GetBlindedMessageForSaltRequest):
 
 function handleMissingSignatures(majorityErrorCode: number | null, response: Response) {
   if (majorityErrorCode === 403) {
-    respondWithError(response, 403, ErrorMessages.EXCEEDED_QUOTA)
+    respondWithError(response, 403, WarningMessage.EXCEEDED_QUOTA)
   } else {
-    respondWithError(
-      response,
-      majorityErrorCode || 500,
-      ErrorMessages.NOT_ENOUGH_PARTIAL_SIGNATURES
-    )
+    respondWithError(response, majorityErrorCode || 500, ErrorMessage.NOT_ENOUGH_PARTIAL_SIGNATURES)
   }
 }

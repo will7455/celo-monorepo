@@ -2,17 +2,14 @@
     "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "containerName": {
-            "value": "staging-pgpnp-centralus"
-        },
         "location": {
-            "value": "centralus"
+            "value": "TODO"
         },
         "imageType": {
             "value": "Public"
         },
         "imageName": {
-            "value": "us.gcr.io/celo-testnet/celo-monorepo:phone-number-privacy-rc1"
+            "value": "us.gcr.io/celo-testnet/celo-monorepo:phone-number-privacy-rc2"
         },
         "osType": {
             "value": "Linux"
@@ -42,15 +39,15 @@
                 },
                 {
                     "name": "DB_HOST",
-                    "value": "staging-pgpnp-centralus.postgres.database.azure.com"
+                    "value": "TODO"
                 },
                 {
                     "name": "DB_USERNAME",
-                    "value": "pgpnp@staging-pgpnp-centralus"
+                    "value": "TODO"
                 },
                 {
                     "name": "DB_PASSWORD",
-                    "secureValue": "GjpRY3L4ebdLRN"
+                    "secureValue": "TODO"
                 },
                 {
                     "name": "DB_DATABASE",
@@ -62,11 +59,11 @@
                 },
                 {
                     "name": "KEYSTORE_AZURE_VAULT_NAME",
-                    "value": "staging-pgpnp-cus"
+                    "value": "TODO"
                 },
                 {
                     "name": "KEYSTORE_AZURE_SECRET_NAME",
-                    "value": "bls-share"
+                    "value": "TODO"
                 }
             ]
         },
@@ -86,7 +83,13 @@
             ]
         },
         "dnsNameLabel": {
-            "value": "clabs-staging-pgpnp-signer"
+            "value": "TODO"
+        },
+        "logAnalyticsWorkspaceId": {
+            "value": "TODO"
+        },
+        "logAnalyticsWorkspaceKey": {
+            "value": "TODO"
         }
     }
 }

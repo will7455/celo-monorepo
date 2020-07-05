@@ -1,6 +1,11 @@
+import {
+  ErrorMessage,
+  SignMessageResponse,
+  WarningMessage,
+} from '@celo/phone-number-privacy-common'
 import { Request, Response } from 'express'
 import { computeBlindedSignature } from '../bls/bls-cryptography-client'
-import { ErrorMessages, respondWithError } from '../common/error-utils'
+import { respondWithError } from '../common/error-utils'
 import { authenticateUser } from '../common/identity'
 import {
   hasValidAccountParam,
@@ -27,19 +32,28 @@ export async function handleGetBlindedMessageForSalt(
   logger.info('Begin getBlindedSalt request')
   try {
     if (!isValidGetSignatureInput(request.body)) {
-      respondWithError(response, 400, ErrorMessages.INVALID_INPUT)
+      respondWithError(response, 400, WarningMessage.INVALID_INPUT)
       return
     }
     if (!authenticateUser(request)) {
-      respondWithError(response, 401, ErrorMessages.UNAUTHENTICATED_USER)
+      respondWithError(response, 401, WarningMessage.UNAUTHENTICATED_USER)
       return
     }
 
     const { account, blindedQueryPhoneNumber, hashedPhoneNumber } = request.body
-    const remainingQueryCount = await getRemainingQueryCount(account, hashedPhoneNumber)
-    if (remainingQueryCount <= 0) {
+    const [performedQueryCount, totalQuota] = await getRemainingQueryCount(
+      account,
+      hashedPhoneNumber
+    )
+    if (performedQueryCount >= totalQuota) {
       logger.debug('No remaining query count')
-      respondWithError(response, 403, ErrorMessages.EXCEEDED_QUOTA)
+      respondWithError(
+        response,
+        403,
+        WarningMessage.EXCEEDED_QUOTA,
+        performedQueryCount,
+        totalQuota
+      )
       return
     }
     const keyProvider = getKeyProvider()
@@ -47,10 +61,18 @@ export async function handleGetBlindedMessageForSalt(
     const signature = computeBlindedSignature(blindedQueryPhoneNumber, privateKey)
     await incrementQueryCount(account)
     logger.debug('Salt retrieval success')
-    response.json({ success: true, signature, version: VERSION })
+
+    const signMessageResponse: SignMessageResponse = {
+      success: true,
+      signature,
+      version: VERSION,
+      performedQueryCount,
+      totalQuota,
+    }
+    response.json(signMessageResponse)
   } catch (error) {
     logger.error('Failed to getSalt', error)
-    respondWithError(response, 500, ErrorMessages.UNKNOWN_ERROR)
+    respondWithError(response, 500, ErrorMessage.UNKNOWN_ERROR)
   }
 }
 
