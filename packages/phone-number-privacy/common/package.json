@@ -1,6 +1,6 @@
 {
   "name": "@celo/phone-number-privacy-common",
-  "version": "1.0.3-dev",
+  "version": "1.0.0",
   "description": "Common library for the combiner and signer libraries",
   "author": "Celo",
   "license": "Apache-2.0",
@@ -10,17 +10,15 @@
     "prepublishOnly": "yarn build",
     "build": "tsc -b .",
     "clean": "tsc -b . --clean",
-    "test": "jest --runInBand --ci",
-    "test:verbose": "jest --verbose",
     "lint": "tslint -c tslint.json --project ."
   },
   "files": [
     "lib/**/*"
   ],
   "dependencies": {
+    "bignumber.js": "^9.0.0"
   },
-  "devDependencies": {
-  },
+  "devDependencies": {},
   "engines": {
     "node": "10"
   }
