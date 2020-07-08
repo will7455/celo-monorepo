@@ -31,12 +31,11 @@ export function* revokePhoneMapping(e164Number: string, account: string) {
       phoneHash
     )
 
-    if (status.total < 1) {
-      Logger.debug('No attestations associated with identifier - skipping revoke')
-      return
+    if (status.isVerified) {
+      yield call([attestationsWrapper, attestationsWrapper.revoke], phoneHash, account)
+    } else {
+      Logger.debug(TAG + '@revokeVerification', 'Account not verified, skipping actual revoke call')
     }
-
-    yield call([attestationsWrapper, attestationsWrapper.revoke], phoneHash, account)
     yield put(resetVerification())
     yield put(setNumberVerified(false))
 
