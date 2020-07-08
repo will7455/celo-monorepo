@@ -29,6 +29,7 @@ import { Screens } from 'src/navigator/Screens'
 import { StackParamList } from 'src/navigator/types'
 import { RootState } from 'src/redux/reducers'
 import { isAppConnected } from 'src/redux/selectors'
+import DisconnectBanner from 'src/shared/DisconnectBanner'
 
 interface State {
   keyboardVisible: boolean
@@ -152,6 +153,7 @@ export class ImportWallet extends React.Component<Props, State> {
                   ]}
                   keyboardShouldPersistTaps={'always'}
                 >
+                  <DisconnectBanner />
                   <CodeInput
                     label={t('global:accountKey')}
                     status={codeStatus}

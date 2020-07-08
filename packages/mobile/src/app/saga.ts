@@ -35,31 +35,35 @@ const DO_NOT_LOCK_PERIOD = 30000 // 30 sec
 // Work that's done before other sagas are initalized
 // Be mindful to not put long blocking tasks here
 export function* appInit() {
-  const isDeprecated: boolean = yield call(isAppVersionDeprecated)
+  try {
+    const isDeprecated: boolean = yield call(isAppVersionDeprecated)
 
-  if (isDeprecated) {
-    Logger.warn(TAG, 'App version is deprecated')
-    navigate(Screens.UpgradeScreen)
-    return
-  } else {
-    Logger.debug(TAG, 'App version is valid')
-  }
+    if (isDeprecated) {
+      Logger.warn(TAG, 'App version is deprecated')
+      navigate(Screens.UpgradeScreen)
+      return
+    } else {
+      Logger.debug(TAG, 'App version is valid')
+    }
 
-  const language = yield select(currentLanguageSelector)
-  if (language) {
-    yield put(setLanguage(language))
-  }
+    const language = yield select(currentLanguageSelector)
+    if (language) {
+      yield put(setLanguage(language))
+    }
 
-  const deepLink = yield call(Linking.getInitialURL)
-  const inSync = yield call(clockInSync)
-  if (!inSync) {
-    navigate(Screens.SetClock)
-    return
-  }
+    const deepLink = yield call(Linking.getInitialURL)
+    const inSync = yield call(clockInSync)
+    if (!inSync) {
+      navigate(Screens.SetClock)
+      return
+    }
 
-  if (deepLink) {
-    handleDeepLink(deepLink)
-    return
+    if (deepLink) {
+      handleDeepLink(deepLink)
+      return
+    }
+  } catch (err) {
+    Logger.error('AppInit error', err.message)
   }
 }
 

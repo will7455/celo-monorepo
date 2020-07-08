@@ -32,7 +32,8 @@ export function* revokePhoneMapping(e164Number: string, account: string) {
     )
 
     if (status.total < 1) {
-      throw new Error('No attestations associated with identifier')
+      Logger.debug('No attestations associated with identifier - skipping revoke')
+      return
     }
 
     yield call([attestationsWrapper, attestationsWrapper.revoke], phoneHash, account)
