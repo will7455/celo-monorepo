@@ -77,6 +77,7 @@ import PaymentRequestConfirmation, {
 import PaymentRequestUnavailable, {
   paymentRequestUnavailableScreenNavOptions,
 } from 'src/paymentRequest/PaymentRequestUnavailable'
+import PincodeChange from 'src/pincode/PincodeChange'
 import PincodeEnter from 'src/pincode/PincodeEnter'
 import PincodeSet from 'src/pincode/PincodeSet'
 import { RootState } from 'src/redux/reducers'
@@ -394,6 +395,11 @@ const settingsScreens = (Navigator: typeof Stack) => (
       options={headerWithBackButton}
       name={Screens.SelectLocalCurrency}
       component={SelectLocalCurrency}
+    />
+    <Navigator.Screen
+      options={headerWithBackButton}
+      name={Screens.PincodeChange}
+      component={PincodeChange}
     />
     <Navigator.Screen options={headerWithBackButton} name={Screens.Licenses} component={Licenses} />
     <Navigator.Screen

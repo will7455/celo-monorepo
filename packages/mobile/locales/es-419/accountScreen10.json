@@ -27,6 +27,13 @@
   "testFaqLink": "Las Preguntas Frecuentes del {{appName}}",
   "termsOfServiceLink": "Las Condiciones de Servicio",
   "editProfile": "Editar perfil",
+  "changePin": "Cambiar PIN",
+  "pincodeChange": {
+    "invalidOldPin": "PIN inválido",
+    "newPinInvalid": "Por favor elige un PIN más seguro",
+    "inputNewPin": "Ingrese su nuevo PIN",
+    "inputOldPin": "Repita su nuevo PIN"
+  },
   "cancel": "Cancelar",
   "changeProfilePhoto": "Cambiar la foto de perfil",
   "name": "Apellido",

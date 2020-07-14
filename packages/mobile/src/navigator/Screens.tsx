@@ -36,6 +36,7 @@ export enum Screens {
   OutgoingPaymentRequestListScreen = 'OutgoingPaymentRequestListScreen',
   PaymentRequestConfirmation = 'PaymentRequestConfirmation',
   PaymentRequestUnavailable = 'PaymentRequestUnavailable',
+  PincodeChange = 'PincodeChange',
   PincodeEnter = 'PincodeEnter',
   PincodeSet = 'PincodeSet',
   PhotosEducation = 'PhotosEducation',

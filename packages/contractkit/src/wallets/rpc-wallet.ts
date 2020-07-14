@@ -60,6 +60,11 @@ export class RpcWallet extends RemoteWallet {
     return signer.isUnlocked()
   }
 
+  async updateAccount(address: string, passphrase: string, newPassphrase: string) {
+    const signer = this.getSigner(address) as RpcSigner
+    return signer.update(passphrase, newPassphrase)
+  }
+
   /**
    * Gets the signer based on the 'from' field in the tx body
    * @param txParams Transaction to sign

@@ -128,6 +128,10 @@ export class Account extends React.Component<Props, State> {
     this.props.navigation.navigate(Screens.SelectLocalCurrency)
   }
 
+  changePin = () => {
+    this.props.navigation.navigate(Screens.PincodeChange)
+  }
+
   goToLicenses = () => {
     this.props.navigation.navigate(Screens.Licenses)
     ValoraAnalytics.track(SettingsEvents.licenses_view)
@@ -282,6 +286,7 @@ export class Account extends React.Component<Props, State> {
               onPress={this.goToLocalCurrencySetting}
             />
             <SectionHeadNew text={t('securityAndData')} style={styles.sectionTitle} />
+            <SettingsItemTextValue title={t('changePin')} onPress={this.changePin} />
             <SettingsItemSwitch
               title={t('requirePinOnAppOpen')}
               value={this.props.requirePinOnAppOpen}

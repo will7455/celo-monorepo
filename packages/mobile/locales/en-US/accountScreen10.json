@@ -27,6 +27,13 @@
   "testFaqLink": "{{appName}} FAQ",
   "termsOfServiceLink": "Terms of service",
   "editProfile": "Edit Profile",
+  "changePin": "Change PIN",
+  "pincodeChange": {
+    "invalidOldPin": "Invalid PIN",
+    "newPinInvalid": "Please use a stronger PIN",
+    "inputNewPin": "Enter new PIN",
+    "inputOldPin": "Enter your PIN"
+  },
   "cancel": "Cancel",
   "changeProfilePhoto": "Change Profile Photo",
   "name": "Name",

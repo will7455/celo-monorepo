@@ -24,6 +24,7 @@ const toRpcHex = (val: string | number | BigNumber | BN | undefined) => {
 enum RpcSignerEndpoint {
   ImportAccount = 'personal_importRawKey',
   UnlockAccount = 'personal_unlockAccount',
+  UpdateAccount = 'personal_updateAccount',
   SignTransaction = 'eth_signTransaction',
   SignBytes = 'eth_sign',
 }
@@ -32,6 +33,7 @@ enum RpcSignerEndpoint {
 type RpcSignerEndpointInputs = {
   personal_importRawKey: [string, string]
   personal_unlockAccount: [string, string, number]
+  personal_updateAccount: [string, string, string]
   eth_signTransaction: [any] // RpcTx doesn't match Tx because of nonce as string instead of number
   eth_sign: [string, string]
 }
@@ -40,6 +42,7 @@ type RpcSignerEndpointInputs = {
 type RpcSignerEndpointResult = {
   personal_importRawKey: string
   personal_unlockAccount: boolean
+  personal_updateAccount: boolean
   eth_signTransaction: EncodedTransaction
   eth_sign: string
 }
@@ -128,6 +131,25 @@ export class RpcSigner implements Signer {
 
   isUnlocked() {
     return this.unlockTime + this.unlockDuration - this.unlockBufferSeconds > currentTimeInSeconds()
+  }
+
+  async update(passphrase: string, newPassphrase: string): Promise<boolean> {
+    try {
+      await this.callAndCheckResponse(RpcSignerEndpoint.UpdateAccount, [
+        this.account,
+        passphrase,
+        newPassphrase,
+      ])
+    } catch (error) {
+      // The callAndCheckResponse will throw an error if the passphrase is incorrect
+      if (error?.message?.toLowerCase()?.includes(INCORRECT_PASSWORD_ERROR)) {
+        return false
+      }
+
+      // Re-throw otherwise
+      throw error
+    }
+    return true
   }
 
   private async callAndCheckResponse<T extends RpcSignerEndpoint>(
