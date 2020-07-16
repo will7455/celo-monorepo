@@ -506,6 +506,7 @@ const NetworkConfigs = {
 
 NetworkConfigs.baklavastaging = NetworkConfigs.baklava
 NetworkConfigs.alfajoresstaging = NetworkConfigs.alfajores
+NetworkConfigs.victoralfajoresstaging = NetworkConfigs.alfajores
 
 const linkedLibraries = {
   FixidityLib: [

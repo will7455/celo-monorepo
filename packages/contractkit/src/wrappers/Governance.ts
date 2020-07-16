@@ -420,6 +420,7 @@ export class GovernanceWrapper extends BaseWrapper<Governance> {
       return {
         proposalID: valueToBigNumber(res[0]),
         value: Object.keys(VoteValue)[valueToInt(res[1])] as VoteValue,
+        // @ts-ignore: value will be undefined if contract is not updated.
         votes: valueToBigNumber(res[2]),
       }
     } catch (_) {
