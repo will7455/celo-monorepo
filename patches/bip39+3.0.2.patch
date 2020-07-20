@@ -1,0 +1,22 @@
+diff --git a/node_modules/bip39/src/index.js b/node_modules/bip39/src/index.js
+index 0cd3522..34b7e1e 100644
+--- a/node_modules/bip39/src/index.js
++++ b/node_modules/bip39/src/index.js
+@@ -35,7 +35,7 @@ function salt(password) {
+ function mnemonicToSeedSync(mnemonic, password) {
+     const mnemonicBuffer = Buffer.from((mnemonic || '').normalize('NFKD'), 'utf8');
+     const saltBuffer = Buffer.from(salt((password || '').normalize('NFKD')), 'utf8');
+-    return pbkdf2_1.pbkdf2Sync(mnemonicBuffer, saltBuffer, 2048, 64, 'sha512');
++    return pbkdf2_1.pbkdf2Sync(mnemonicBuffer, saltBuffer, 2048, 32, 'sha512');
+ }
+ exports.mnemonicToSeedSync = mnemonicToSeedSync;
+ function mnemonicToSeed(mnemonic, password) {
+@@ -43,7 +43,7 @@ function mnemonicToSeed(mnemonic, password) {
+         try {
+             const mnemonicBuffer = Buffer.from((mnemonic || '').normalize('NFKD'), 'utf8');
+             const saltBuffer = Buffer.from(salt((password || '').normalize('NFKD')), 'utf8');
+-            pbkdf2_1.pbkdf2(mnemonicBuffer, saltBuffer, 2048, 64, 'sha512', (err, data) => {
++            pbkdf2_1.pbkdf2(mnemonicBuffer, saltBuffer, 2048, 32, 'sha512', (err, data) => {
+                 if (err)
+                     return reject(err);
+                 else
