@@ -154,7 +154,6 @@ export class ImportWallet extends React.Component<Props, State> {
                   ]}
                   keyboardShouldPersistTaps={'always'}
                 >
-                  <DisconnectBanner />
                   <CodeInput
                     label={t('global:accountKey')}
                     status={codeStatus}
