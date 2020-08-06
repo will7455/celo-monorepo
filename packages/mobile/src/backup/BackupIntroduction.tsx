@@ -110,7 +110,7 @@ function AccountKeyPostSetup() {
       <View>
         <Text style={fontStyles.h2}>{t('postSetupTitle')}</Text>
         <View style={styles.keyArea}>
-          <Text style={fontStyles.large}>{accountKey}</Text>
+          <Text style={styles.accountKey}>{accountKey}</Text>
         </View>
         <Text style={styles.postSetupBody}>{t('postSetupBody')}</Text>
       </View>
@@ -152,6 +152,11 @@ const styles = StyleSheet.create({
     padding: Spacing.Regular16,
     backgroundColor: colorsV2.beige,
     marginTop: Spacing.Regular16,
+  },
+  accountKey: {
+    ...fontStyles.large,
+    fontSize: 22,
+    lineHeight: 26,
   },
   postSetupBody: {
     ...fontStyles.regular,
