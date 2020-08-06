@@ -91,7 +91,7 @@ export class BackupPhraseContainer extends React.Component<Props> {
         </View>
         {mode === BackupPhraseContainerMode.READONLY && (
           <View style={styles.phraseContainer}>
-            {!!words && <Text style={styles.phraseText}>{words}</Text>}
+            {!!words && <Text style={fontStyles.accountKeyDisplay}>{words}</Text>}
           </View>
         )}
         {mode === BackupPhraseContainerMode.INPUT && (
@@ -151,9 +151,6 @@ const styles = StyleSheet.create({
     alignContent: 'center',
     justifyContent: 'center',
     padding: 16,
-  },
-  phraseText: {
-    ...fontStyles.regular,
   },
   phraseInputContainer: {
     marginTop: 10,

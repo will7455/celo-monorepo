@@ -66,6 +66,12 @@ const fontStyles = StyleSheet.create({
     fontFamily: Jost.Medium,
     color: colors.dark,
   },
+  accountKeyDisplay: {
+    fontFamily: Inter.Medium,
+    fontSize: 20,
+    lineHeight: 28,
+    letterSpacing: 0.3,
+  },
   displayName: {
     fontSize: 18,
     lineHeight: 24,

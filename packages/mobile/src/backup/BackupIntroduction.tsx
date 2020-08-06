@@ -110,7 +110,8 @@ function AccountKeyPostSetup() {
       <View>
         <Text style={fontStyles.h2}>{t('postSetupTitle')}</Text>
         <View style={styles.keyArea}>
-          <Text style={fontStyles.large}>{accountKey}</Text>
+          {accountKey &&
+            accountKey.split(' ').map((word) => <Text style={styles.accountKeyWord}>{word} </Text>)}
         </View>
         <Text style={styles.postSetupBody}>{t('postSetupBody')}</Text>
       </View>
@@ -149,9 +150,26 @@ const styles = StyleSheet.create({
     paddingBottom: Spacing.Regular16,
   },
   keyArea: {
-    padding: Spacing.Regular16,
+    padding: 12,
     backgroundColor: colorsV2.beige,
+    borderWidth: 3,
+    borderColor: colorsV2.listBorder,
     marginTop: Spacing.Regular16,
+    borderRadius: 6,
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    alignItems: 'center',
+  },
+  accountKeyWord: {
+    ...fontStyles.label,
+    lineHeight: 24,
+    color: '#000',
+    fontSize: 20,
+
+    paddingVertical: 5,
+
+    paddingHorizontal: 2,
+    borderRadius: 4,
   },
   postSetupBody: {
     ...fontStyles.regular,
