@@ -17,7 +17,10 @@ export default React.memo(function Body({ isOpen }: Props) {
   return (
     <View style={[styles.root, isMobile && styles.mobile, isMobile && isOpen && styles.open]}>
       <RingsGlyph color={colors.dark} height={30} />
-      <Flower />
+      <View style={styles.flower}>
+        <Flower />
+      </View>
+      <View style={styles.spacer} />
       <Poem />
       <Fade duration={1800} delay={1200}>
         <View style={styles.footer}>
@@ -46,6 +49,8 @@ const styles = StyleSheet.create({
     height: 'calc(100vh - 50px)',
   },
   mobile: {
-    width: '100vw',
+    width: '200vw',
   },
+  spacer: { height: '300vh' },
+  flower: { position: 'fixed', width: '100%', height: '100vh', alignItems: 'center', padding: 24 },
 })

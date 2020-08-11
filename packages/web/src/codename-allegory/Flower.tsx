@@ -46,15 +46,13 @@ export default function Flower() {
 
   const outlineOpacity = value.interpolate(isMobile ? OUTLINE_OPACITY_MOBILE : OUTLINE_OPACITY)
 
-  const translateY = value.interpolate(isMobile ? POSITIONING_MOBILE : POSITIONING_DESKTOP)
-
   return (
     <View style={[styles.breathe, isMobile && styles.breatheMobile]}>
       <Animated.View
         style={[
           styles.root,
           isMobile && styles.mobileRoot,
-          { transform: [{ scale }, { translateY }], opacity: isLoaded ? 1 : 0 },
+          { transform: [{ scale }], opacity: isLoaded ? 1 : 0 },
         ]}
       >
         <AnimatedRatio ratio={1} style={[styles.outline, { opacity: outlineOpacity }]}>
@@ -75,11 +73,11 @@ const styles = StyleSheet.create({
     willChange: 'transform, opacity',
     transitionProperty: 'opacity',
     transitionDuration: '4s',
-    transformOrigin: 'bottom',
+    transformOrigin: 'top',
     justifyContent: 'center',
   },
   mobileRoot: {
-    transformOrigin: 'bottom',
+    transformOrigin: 'center',
     marginTop: 0,
   },
   outline: {
@@ -109,8 +107,8 @@ const styles = StyleSheet.create({
 })
 
 const COLOR_OPACITY = {
-  inputRange: [0, 0.15, 0.25],
-  outputRange: [1, 1, 0.1],
+  inputRange: [0, 0.5, 0.55],
+  outputRange: [1, 1, 0],
 }
 
 const COLOR_OPACITY_MOBILE = {
@@ -119,8 +117,8 @@ const COLOR_OPACITY_MOBILE = {
 }
 
 const OUTLINE_OPACITY = {
-  inputRange: [0, 0.1, 0.3, 0.4],
-  outputRange: [0, 1, 1, 0],
+  inputRange: [0, 0.5, 0.55, 0.65],
+  outputRange: [0, 0, 1, 0],
 }
 
 const OUTLINE_OPACITY_MOBILE = {
@@ -129,21 +127,11 @@ const OUTLINE_OPACITY_MOBILE = {
 }
 
 const SCALER_DESKTOP = {
-  inputRange: [0, 0.1, 0.5],
-  outputRange: [1, 0.75, 0.1],
+  inputRange: [0, 0.1, 1],
+  outputRange: [1, 0.66, 0.3],
 }
 
 const SCALER_MOBILE = {
   inputRange: [0, 0.1, 0.2, 1],
   outputRange: [1, 1, 0.5, 0.3],
-}
-
-const POSITIONING_DESKTOP = {
-  inputRange: [0, 0.1, 0.5],
-  outputRange: ['0%', '1%', '30%'],
-}
-
-const POSITIONING_MOBILE = {
-  inputRange: [0, 0.1, 0.5, 1],
-  outputRange: ['0%', '0%', '25%', '100%'],
 }

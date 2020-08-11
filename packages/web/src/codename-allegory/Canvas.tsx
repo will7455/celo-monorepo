@@ -53,7 +53,6 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
   },
   container: {
-    overflow: 'hidden',
     flexDirection: 'row',
   },
 })
