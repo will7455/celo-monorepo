@@ -14,6 +14,7 @@ import {
   getProxyName
 } from './testnet-utils'
 import { outputIncludes } from './utils'
+const generator = require('generate-password')
 
 const CLOUDSQL_SECRET_NAME = 'blockscout-cloudsql-credentials'
 const BACKUP_GCS_SECRET_NAME = 'backup-blockchain-credentials'
@@ -101,12 +102,17 @@ export async function createCloudSQLInstance(celoEnv: string, instanceName: stri
     `gcloud sql instances patch ${instanceName} --backup-start-time 17:00`
   )
 
-  const blockscoutDBUsername = Math.random()
-    .toString(36)
-    .slice(-8)
-  const blockscoutDBPassword = Math.random()
-    .toString(36)
-    .slice(-8)
+  const passwordOptions = {
+    length: 22,
+    numbers: true,
+    symbols: false,
+    lowercase: true,
+    uppercase: true,
+    strict: true
+  }
+
+  const blockscoutDBUsername = generator.generate(passwordOptions)
+  const blockscoutDBPassword = generator.generate(passwordOptions)
 
   console.info('Creating SQL user')
   await execCmdWithExitOnFailure(
