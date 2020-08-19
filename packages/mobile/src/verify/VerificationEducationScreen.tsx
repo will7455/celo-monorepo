@@ -11,12 +11,16 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useDispatch, useSelector } from 'react-redux'
 import i18n, { Namespaces } from 'src/i18n'
 import { setHasSeenVerificationNux } from 'src/identity/actions'
-import { attestationCodesSelector } from 'src/identity/reducer'
+import { LOOKUP_GAS_FEE_ESTIMATE, LOOKUP_TX_AMOUNT } from 'src/identity/privateHashing'
+import { attestationCodesSelector, verificationStatusSelector } from 'src/identity/reducer'
+import { VerificationStatus } from 'src/identity/types'
+import { isUserBalanceSufficient } from 'src/identity/utils'
 import { HeaderTitleWithSubtitle, nuxNavigationOptions } from 'src/navigator/Headers.v2'
 import { navigateHome } from 'src/navigator/NavigationService'
 import { Screens } from 'src/navigator/Screens'
 import { TopBarTextButton } from 'src/navigator/TopBarButton.v2'
 import { StackParamList } from 'src/navigator/types'
+import { stableTokenBalanceSelector } from 'src/stableToken/reducer'
 import VerificationLearnMoreDialog from 'src/verify/VerificationLearnMoreDialog'
 import VerificationSkipDialog from 'src/verify/VerificationSkipDialog'
 
@@ -31,7 +35,7 @@ function VerificationEducationScreen({ route, navigation }: Props) {
   const dispatch = useDispatch()
   const headerHeight = useHeaderHeight()
   const insets = useSafeAreaInsets()
-  const attestationCodes = useSelector(attestationCodesSelector)
+  const verificationStatus = useSelector(verificationStatusSelector)
 
   const onPressStart = () => {
     dispatch(setHasSeenVerificationNux(true))
@@ -55,6 +59,15 @@ function VerificationEducationScreen({ route, navigation }: Props) {
     setShowLearnMoreDialog(false)
   }
 
+  const userBalance = useSelector(stableTokenBalanceSelector)
+  const userBalanceSufficientForLookup = isUserBalanceSufficient(
+    userBalance,
+    LOOKUP_GAS_FEE_ESTIMATE + LOOKUP_TX_AMOUNT
+  )
+
+  const isSufficientBalance = userBalanceSufficientForLookup && true
+  const isStarted = verificationStatus !== VerificationStatus.Stopped
+
   return (
     <View style={styles.container}>
       <ScrollView
@@ -64,21 +77,38 @@ function VerificationEducationScreen({ route, navigation }: Props) {
         <Text style={styles.header} testID="VerificationEducationHeader">
           {t('verificationEducation.header')}
         </Text>
-        <Text style={styles.body}>{t('verificationEducation.body')}</Text>
-        <Button
-          text={
-            attestationCodes.length
-              ? t('verificationEducation.resume')
-              : t('verificationEducation.start')
-          }
-          onPress={onPressStart}
-          type={BtnTypes.ONBOARDING}
-          style={styles.startButton}
-          testID="VerificationEducationContinue"
-        />
+        {(isSufficientBalance && (
+          <>
+            <Text style={styles.body}>
+              {isStarted
+                ? t('verificationEducation.bodyAlreadyStarted')
+                : t('verificationEducation.body')}
+            </Text>
+            <Button
+              text={
+                isStarted ? t('verificationEducation.resume') : t('verificationEducation.start')
+              }
+              onPress={onPressStart}
+              type={BtnTypes.ONBOARDING}
+              style={styles.startButton}
+              testID="VerificationEducationContinue"
+            />
+          </>
+        )) || (
+          <>
+            <Text style={styles.body}>{t('verificationEducation.bodyInsufficientBalance')}</Text>
+            <Button
+              text={t('verificationEducation.skipForNow')}
+              onPress={onPressSkipConfirm}
+              type={BtnTypes.ONBOARDING}
+              style={styles.startButton}
+              testID="VerificationEducationSkip"
+            />
+          </>
+        )}
         <View style={styles.spacer} />
         <TextButton style={styles.learnMoreButton} onPress={onPressLearnMore}>
-          {t('verificationEducation.learnMore')}
+          {t('verificationEducation.doINeedToConfirm')}
         </TextButton>
       </ScrollView>
       <VerificationSkipDialog

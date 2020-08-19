@@ -56,6 +56,7 @@ export interface State {
   numCompleteAttestations: number
   verificationStatus: VerificationStatus
   hasSeenVerificationNux: boolean
+  hasCheckedSelfPhoneHash: boolean
   addressToE164Number: AddressToE164NumberType
   // Note: Do not access values in this directly, use the `getAddressFromPhoneNumber` helper in contactMapping
   e164NumberToAddress: E164NumberToAddressType
@@ -75,6 +76,7 @@ const initialState: State = {
   numCompleteAttestations: 0,
   verificationStatus: VerificationStatus.Stopped,
   hasSeenVerificationNux: false,
+  hasCheckedSelfPhoneHash: false,
   addressToE164Number: {},
   e164NumberToAddress: {},
   e164NumberToSalt: {},
@@ -286,3 +288,4 @@ export const secureSendPhoneNumberMappingSelector = (state: RootState) =>
 export const importContactsProgressSelector = (state: RootState) =>
   state.identity.importContactsProgress
 export const matchedContactsSelector = (state: RootState) => state.identity.matchedContacts
+export const verificationStatusSelector = (state: RootState) => state.identity.verificationStatus

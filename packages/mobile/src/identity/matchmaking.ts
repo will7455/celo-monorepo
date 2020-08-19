@@ -1,5 +1,6 @@
 import { PNPUtils } from '@celo/contractkit'
 import { PhoneNumberHashDetails } from '@celo/contractkit/lib/utils/phone-number-lookup/phone-number-identifier'
+import { ErrorMessages as OdisErrorMessages } from '@celo/contractkit/lib/utils/phone-number-lookup/phone-number-lookup'
 import DeviceInfo from 'react-native-device-info'
 import { call, put } from 'redux-saga/effects'
 import { ErrorMessages } from 'src/app/ErrorMessages'
@@ -44,7 +45,7 @@ export function* fetchContactMatches(e164NumberToRecipients: NumberToRecipient) 
     const matches = getMatchedContacts(e164NumberToRecipients, matchedE164Number)
     yield put(addContactsMatches(matches))
   } catch (error) {
-    if (error.message === ErrorMessages.PGPNP_QUOTA_ERROR) {
+    if (error.message === OdisErrorMessages.ODIS_QUOTA_ERROR) {
       throw new Error(ErrorMessages.MATCHMAKING_QUOTA_EXCEEDED)
     }
     throw error

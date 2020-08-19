@@ -1,5 +1,6 @@
 import { PNPUtils } from '@celo/contractkit'
 import { PhoneNumberHashDetails } from '@celo/contractkit/lib/utils/phone-number-lookup/phone-number-identifier'
+import { ErrorMessages as OdisErrorMessages } from '@celo/contractkit/lib/utils/phone-number-lookup/phone-number-lookup'
 import { getPhoneHash, isE164Number, PhoneNumberUtils } from '@celo/utils/src/phoneNumbers'
 import DeviceInfo from 'react-native-device-info'
 import { call, put, select } from 'redux-saga/effects'
@@ -25,6 +26,7 @@ import { currentAccountSelector } from 'src/web3/selectors'
 
 const TAG = 'identity/privateHashing'
 export const LOOKUP_GAS_FEE_ESTIMATE = 0.03
+export const LOOKUP_TX_AMOUNT = 0.01
 
 // Fetch and cache a phone number's salt and hash
 export function* fetchPhoneHashPrivate(e164Number: string) {
@@ -54,31 +56,22 @@ export function* fetchPhoneHashPrivate(e164Number: string) {
 
 /**
  * Retrieve the salt from the cache if present,
- * otherwise query from the service
+ * otherwise query from the service and store tothe state
  */
-function* doFetchPhoneHashPrivate(e164Number: string) {
+export function* doFetchPhoneHashPrivate(e164Number: string) {
   const account: string = yield call(getConnectedAccount)
   Logger.debug(`${TAG}@fetchPrivatePhoneHash`, 'Fetching phone hash details')
-  const saltCache: E164NumberToSaltType = yield select(e164NumberToSaltSelector)
-  const cachedSalt = saltCache[e164Number]
+  const selfPhoneHashDetails: PhoneNumberHashDetails | undefined = yield call(
+    getUserSelfPhoneHashDetails
+  )
 
-  if (cachedSalt) {
+  if (selfPhoneHashDetails) {
     Logger.debug(`${TAG}@fetchPrivatePhoneHash`, 'Salt was cached')
-    const phoneHash = getPhoneHash(e164Number, cachedSalt)
-    return { e164Number, phoneHash, salt: cachedSalt }
+    return selfPhoneHashDetails
   }
 
   Logger.debug(`${TAG}@fetchPrivatePhoneHash`, 'Salt was not cached, fetching')
-  const selfPhoneDetails: PhoneNumberHashDetails | undefined = yield call(
-    getUserSelfPhoneHashDetails
-  )
-  const selfPhoneHash = selfPhoneDetails?.phoneHash
-  const details: PhoneNumberHashDetails = yield call(
-    getPhoneHashPrivate,
-    e164Number,
-    account,
-    selfPhoneHash
-  )
+  const details: PhoneNumberHashDetails = yield call(getPhoneHashPrivate, e164Number, account)
   yield put(updateE164PhoneNumberSalts({ [e164Number]: details.salt }))
   return details
 }
@@ -116,7 +109,7 @@ function* getPhoneHashPrivate(e164Number: string, account: string, selfPhoneHash
       blsBlindingClient
     )
   } catch (error) {
-    if (error.message === ErrorMessages.PGPNP_QUOTA_ERROR) {
+    if (error.message === OdisErrorMessages.ODIS_QUOTA_ERROR) {
       throw new Error(ErrorMessages.SALT_QUOTA_EXCEEDED)
     }
     throw error
@@ -160,7 +153,10 @@ function* navigateToQuotaPurchaseScreen() {
     const txId = generateStandbyTransactionId(ownAddress)
 
     const userBalance = yield select(stableTokenBalanceSelector)
-    const userBalanceSufficient = isUserBalanceSufficient(userBalance, LOOKUP_GAS_FEE_ESTIMATE)
+    const userBalanceSufficient = isUserBalanceSufficient(
+      userBalance,
+      LOOKUP_GAS_FEE_ESTIMATE + LOOKUP_TX_AMOUNT
+    )
     if (!userBalanceSufficient) {
       throw Error(ErrorMessages.INSUFFICIENT_BALANCE)
     }
@@ -168,7 +164,7 @@ function* navigateToQuotaPurchaseScreen() {
     yield put(
       transferStableToken({
         recipientAddress: ownAddress, // send payment to yourself
-        amount: '0.01', // one penny
+        amount: LOOKUP_TX_AMOUNT.toString(), // one penny
         comment: 'Lookup Quota Purchase',
         txId,
       })
