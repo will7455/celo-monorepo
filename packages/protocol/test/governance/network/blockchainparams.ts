@@ -128,7 +128,7 @@ contract('BlockchainParameters', (accounts: string[]) => {
       assertContainSubset(log, {
         event: 'UptimeLookbackWindowSet',
         args: {
-          limit: new BigNumber(lookbackWindow),
+          window: new BigNumber(lookbackWindow),
         },
       })
     })
@@ -198,7 +198,7 @@ contract('BlockchainParameters', (accounts: string[]) => {
       assertContainSubset(resp.logs[4], {
         event: 'UptimeLookbackWindowSet',
         args: {
-          limit: new BigNumber(lookbackWindow),
+          window: new BigNumber(lookbackWindow),
         },
       })
     })
