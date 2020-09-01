@@ -48,6 +48,14 @@ contract BlockchainParameters is Ownable, Initializable {
   }
 
   /**
+   * @notice Returns the storage, major, minor, and patch version of the contract.
+   * @return The storage, major, minor, and patch version of the contract.
+   */
+  function getVersionNumber() external pure returns (uint256, uint256, uint256, uint256) {
+    return (1, 1, 0, 0);
+  }
+
+  /**
    * @notice Sets the minimum client version.
    * @param major Major version.
    * @param minor Minor version.
