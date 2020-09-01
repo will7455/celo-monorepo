@@ -1086,3 +1086,15 @@ workflows:
       - protocol-test-with-code-coverage:
           requires:
             - lint-checks
+  # nightly-integration:
+  #   triggers:
+  #     - schedule:
+  #         # 11 AM in UTC = 3 AM in PDT (winter time)
+  #         cron: '20 9 * * *'
+  #         # filters:
+  #         #   branches:
+  #         #     only:
+  #         #       - master
+  #   jobs:
+  #     - install_dependencies
+  #     - integration-celotool-install

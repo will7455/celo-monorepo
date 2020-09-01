@@ -54,6 +54,8 @@ metadata:
 spec:
   sessionAffinity: ClientIP
   ports:
+  - port: 30303
+    name: ethereum
   - port: 8545
     name: rpc
   - port: 8546
@@ -130,6 +132,26 @@ spec:
       - name: account
         secret:
           secretName: {{ template "common.fullname" . }}-geth-account
+{{- end -}}
+
+{{- define "celo.wait-bootnode-initcontainer" -}}
+- name: wait-to-bootnode
+  image: "{{ .Values.celotool.image.repository }}:{{ .Values.celotool.image.tag }}"
+  imagePullPolicy: Always
+  command:
+  - /bin/sh
+  - -c
+  args:
+  - |
+     [[ "$BOOTNODE_IP_ADDRESS" == 'none' ]] && BOOTNODE_IP_ADDRESS=${{ .Release.Namespace | upper }}_BOOTNODE_SERVICE_HOST
+     until nc -vzuw 3 $BOOTNODE_IP_ADDRESS 30301; do echo "Waiting for myconfig service"; sleep 2; done;
+  env:
+  - name: BOOTNODE_IP_ADDRESS
+  value: {{ default "none" .Values.geth.bootnodeIpAddress  }}
+  resources:
+    requests:
+      memory: 10M
+      cpu: 50m
 {{- end -}}
 
 {{- /* This template puts a semicolon-separated pair of proxy enodes into $PROXY_ENODE_URL_PAIR. */ -}}

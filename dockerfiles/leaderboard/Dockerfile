@@ -31,6 +31,6 @@ COPY packages/flake-tracker packages/flake-tracker
 # build all
 RUN yarn build
 
-WORKDIR /celo-monorepo/packages/leaderboard
+WORKDIR /celo-monorepo/packages/metadata-crawler
 
 CMD ["yarn run ts-node src/board.ts ; yarn run ts-node src/upload.ts"]
