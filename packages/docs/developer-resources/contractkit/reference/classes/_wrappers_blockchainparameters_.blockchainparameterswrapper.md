@@ -18,9 +18,11 @@ Network parameters that are configurable by governance.
 
 * [events](_wrappers_blockchainparameters_.blockchainparameterswrapper.md#events)
 * [getBlockGasLimit](_wrappers_blockchainparameters_.blockchainparameterswrapper.md#getblockgaslimit)
+* [getUptimeLookbackWindow](_wrappers_blockchainparameters_.blockchainparameterswrapper.md#getuptimelookbackwindow)
 * [setBlockGasLimit](_wrappers_blockchainparameters_.blockchainparameterswrapper.md#setblockgaslimit)
 * [setIntrinsicGasForAlternativeFeeCurrency](_wrappers_blockchainparameters_.blockchainparameterswrapper.md#setintrinsicgasforalternativefeecurrency)
 * [setMinimumClientVersion](_wrappers_blockchainparameters_.blockchainparameterswrapper.md#setminimumclientversion)
+* [setUptimeLookbackWindow](_wrappers_blockchainparameters_.blockchainparameterswrapper.md#setuptimelookbackwindow)
 
 ### Accessors
 
@@ -68,6 +70,30 @@ ___
 *Defined in [packages/contractkit/src/wrappers/BlockchainParameters.ts:19](https://github.com/celo-org/celo-monorepo/blob/master/packages/contractkit/src/wrappers/BlockchainParameters.ts#L19)*
 
 Getting the block gas limit.
+
+#### Type declaration:
+
+▸ (...`args`: InputArgs): *Promise‹Output›*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`...args` | InputArgs |
+
+___
+
+###  getUptimeLookbackWindow
+
+• **getUptimeLookbackWindow**: *function* = proxyCall(
+    this.contract.methods.uptimeLookbackWindow,
+    undefined,
+    valueToInt
+  )
+
+*Defined in [packages/contractkit/src/wrappers/BlockchainParameters.ts:31](https://github.com/celo-org/celo-monorepo/blob/master/packages/contractkit/src/wrappers/BlockchainParameters.ts#L31)*
+
+Getting the uptime lookback window.
 
 #### Type declaration:
 
@@ -131,6 +157,26 @@ ___
 *Defined in [packages/contractkit/src/wrappers/BlockchainParameters.ts:27](https://github.com/celo-org/celo-monorepo/blob/master/packages/contractkit/src/wrappers/BlockchainParameters.ts#L27)*
 
 Set minimum client version.
+
+#### Type declaration:
+
+▸ (...`args`: InputArgs): *[CeloTransactionObject](_wrappers_basewrapper_.celotransactionobject.md)‹Output›*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`...args` | InputArgs |
+
+___
+
+###  setUptimeLookbackWindow
+
+• **setUptimeLookbackWindow**: *function* = proxySend(this.kit, this.contract.methods.setUptimeLookbackWindow)
+
+*Defined in [packages/contractkit/src/wrappers/BlockchainParameters.ts:39](https://github.com/celo-org/celo-monorepo/blob/master/packages/contractkit/src/wrappers/BlockchainParameters.ts#L39)*
+
+Setting the uptime lookback window.
 
 #### Type declaration:
 
