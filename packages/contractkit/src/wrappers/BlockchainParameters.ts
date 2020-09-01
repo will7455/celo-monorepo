@@ -25,4 +25,16 @@ export class BlockchainParametersWrapper extends BaseWrapper<BlockchainParameter
    * Set minimum client version.
    */
   setMinimumClientVersion = proxySend(this.kit, this.contract.methods.setMinimumClientVersion)
+  /**
+   * Getting the uptime lookback window.
+   */
+  getUptimeLookbackWindow = proxyCall(
+    this.contract.methods.uptimeLookbackWindow,
+    undefined,
+    valueToInt
+  )
+  /**
+   * Setting the uptime lookback window.
+   */
+  setUptimeLookbackWindow = proxySend(this.kit, this.contract.methods.setUptimeLookbackWindow)
 }
