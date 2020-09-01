@@ -918,7 +918,7 @@ contract Validators is
     uint256 balance = getLockedGold().getAccountTotalLockedGold(account);
     // Add a bit of "wiggle room" to accommodate the fact that vote activation can result in a 1
     // wei rounding error.
-    return balance.add(10) >= getAccountLockedGoldRequirement(account);
+    return balance.add(1) >= getAccountLockedGoldRequirement(account);
   }
 
   /**

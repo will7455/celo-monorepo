@@ -660,7 +660,7 @@ contract('Validators', (accounts: string[]) => {
       beforeEach(async () => {
         await mockLockedGold.setAccountTotalLockedGold(
           validator,
-          validatorLockedGoldRequirements.value.minus(11)
+          validatorLockedGoldRequirements.value.minus(2)
         )
       })
 
@@ -927,7 +927,7 @@ contract('Validators', (accounts: string[]) => {
             beforeEach(async () => {
               await mockLockedGold.setAccountTotalLockedGold(
                 group,
-                groupLockedGoldRequirements.value.minus(11)
+                groupLockedGoldRequirements.value.minus(2)
               )
             })
 
@@ -941,7 +941,7 @@ contract('Validators', (accounts: string[]) => {
           beforeEach(async () => {
             await mockLockedGold.setAccountTotalLockedGold(
               validator,
-              validatorLockedGoldRequirements.value.minus(11)
+              validatorLockedGoldRequirements.value.minus(2)
             )
           })
 
@@ -1300,7 +1300,7 @@ contract('Validators', (accounts: string[]) => {
         beforeEach(async () => {
           await mockLockedGold.setAccountTotalLockedGold(
             group,
-            groupLockedGoldRequirements.value.minus(11)
+            groupLockedGoldRequirements.value.minus(2)
           )
         })
 
@@ -1570,7 +1570,7 @@ contract('Validators', (accounts: string[]) => {
             beforeEach(async () => {
               await mockLockedGold.setAccountTotalLockedGold(
                 validator,
-                validatorLockedGoldRequirements.value.minus(11)
+                validatorLockedGoldRequirements.value.minus(2)
               )
             })
 
@@ -1585,7 +1585,7 @@ contract('Validators', (accounts: string[]) => {
             beforeEach(async () => {
               await mockLockedGold.setAccountTotalLockedGold(
                 group,
-                groupLockedGoldRequirements.value.minus(11)
+                groupLockedGoldRequirements.value.minus(2)
               )
             })
 
@@ -1599,7 +1599,7 @@ contract('Validators', (accounts: string[]) => {
             beforeEach(async () => {
               await mockLockedGold.setAccountTotalLockedGold(
                 group,
-                groupLockedGoldRequirements.value.times(2).minus(11)
+                groupLockedGoldRequirements.value.times(2).minus(2)
               )
               await validators.addFirstMember(validator, NULL_ADDRESS, NULL_ADDRESS)
               await registerValidator(validator2)
@@ -2262,7 +2262,7 @@ contract('Validators', (accounts: string[]) => {
         beforeEach(async () => {
           await mockLockedGold.setAccountTotalLockedGold(
             validator,
-            validatorLockedGoldRequirements.value.minus(11)
+            validatorLockedGoldRequirements.value.minus(2)
           )
           ret = await validators.distributeEpochPaymentsFromSigner.call(validator, maxPayment)
           await validators.distributeEpochPaymentsFromSigner(validator, maxPayment)
@@ -2285,7 +2285,7 @@ contract('Validators', (accounts: string[]) => {
         beforeEach(async () => {
           await mockLockedGold.setAccountTotalLockedGold(
             group,
-            groupLockedGoldRequirements.value.minus(11)
+            groupLockedGoldRequirements.value.minus(2)
           )
           ret = await validators.distributeEpochPaymentsFromSigner.call(validator, maxPayment)
           await validators.distributeEpochPaymentsFromSigner(validator, maxPayment)
