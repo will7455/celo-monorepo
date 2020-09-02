@@ -708,10 +708,6 @@ async function helmParameters(celoEnv: string, useExistingGenesis: boolean) {
         `--set pprof.enabled="false"`,
       ]
 
-  const genesisContent = useExistingGenesis
-    ? await getGenesisBlockFromGoogleStorage(celoEnv)
-    : generateGenesisFromEnv()
-  
   let gethImageRepository = fetchEnv('GETH_NODE_DOCKER_IMAGE_REPOSITORY')
   let gethImageTag = fetchEnv('GETH_NODE_DOCKER_IMAGE_TAG')
   

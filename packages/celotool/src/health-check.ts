@@ -42,13 +42,13 @@ async function main() {
   const url = process.env.WEB3 || 'http://localhost:8545'
   const kit = newKit(url)
 
-  const startBlock = 100
+  const startBlock = 10
   const endBlock = 104
 
   let total = 0
   let maxTime = 0
   let totalSigners = 0
-  const numValidators = 30
+  const numValidators = 4
 
   for (let j = 0; j < numValidators; j++) {
     if (!signerInfo[j]) {
@@ -86,6 +86,7 @@ async function main() {
       }
       if (binary.charAt(j) === '1') {
         totalSigners++
+        sequenceInfo[j] = 0
       }
       maxSequenceInfo[j] = Math.max(maxSequenceInfo[j], sequenceInfo[j])
     }
